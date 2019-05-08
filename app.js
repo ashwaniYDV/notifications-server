@@ -1,0 +1,62 @@
+const express=require('express');
+const morgan=require('morgan');
+const bodyParser=require('body-parser');
+const mongoose=require('mongoose');
+const cors=require('cors');
+const {mongoURI}=require('./configs/config');
+
+const users=require('./routes/users');
+
+const app=express();
+
+let server = require('http').Server(app);
+
+// Connecting to database
+const db = mongoURI;
+mongoose
+    .connect(db, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+    })
+    .then(() => console.log('db connected'))
+    .catch((err) => console.log(err))
+//set mongoose's Promise equal to global Promise since mongoose's Promise version is depricated
+mongoose.Promise = global.Promise;
+
+//Middlewares
+app.use(cors());
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+
+//Routes
+app.use('/users',users);
+
+//Catch 404 errors and forward them to error handelers
+app.use((req,res,next)=>{
+    const err=new Error('Not Found');
+    err.status=404;
+    next(err);
+})
+
+//Error handeler function
+app.use((err,req,res,next)=>{
+    const error=app.get('env')==='development' ? err : {};
+    const status=err.status||500;
+
+    //respond to clients
+    res.status(status).json({
+        error:{
+            message: error.message
+        }
+    });
+
+    //respond to ourselves
+    console.error(err); 
+})
+
+//Start the server
+var port = process.env.PORT || 3000;
+server.listen(port, function() {
+  console.log("App is running on port " + port);
+});
