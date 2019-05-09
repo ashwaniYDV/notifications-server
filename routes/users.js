@@ -16,4 +16,10 @@ router.route('/signIn')
 router.route('/secret')
     .get(passport.authenticate('jwt',{session: false}),UsersControllers.secret)
 
+router.route('/')
+    .get(UsersControllers.getAllUsers)
+
+router.route('/:userId')
+    .get(UsersControllers.getParticulerUser)
+
 module.exports=router;
