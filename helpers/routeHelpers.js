@@ -24,7 +24,8 @@ module.exports={
             email: Joi.string().email().required(),
             password: Joi.string().required(),
             name: Joi.string().required(),
-            isSuperUser: Joi.boolean().required()
+            isSuperUser: Joi.boolean().required(),
+            por: Joi.array().required()
         })
     }
 }
