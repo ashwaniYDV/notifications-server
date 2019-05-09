@@ -22,6 +22,10 @@ const userSchema = new Schema({
     required: true,
     default: false,
   },
+  por : { 
+    type : Array , 
+    "default" : []
+  },
   registerDate: {
     type: Date,
     default: Date.now
