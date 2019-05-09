@@ -145,18 +145,20 @@ module.exports={
         }
     },
 
-    //get user by rollno api (access: all)
-    getUserByRollno: async(req,res,next)=>{
-        const rollno = req.params.rollno;
+    //get users by batch and branch api (access: all)
+    getUsersByBatchAndBranch: async(req,res,next)=>{
 
-        const user=await User.findOne({rollno: rollno})
-        if(user){
+        const batch = req.params.batch;
+        const branch = req.params.branch;
+
+        const users=await User.find({batch: batch, branch: branch})
+        if(users){
             res.status(200).json({
-                user: user
+                users: users
             })
         } else {
             res.status(404).json({
-                message: "User not found"
+                message: "Users not found"
             })
         }
     },
