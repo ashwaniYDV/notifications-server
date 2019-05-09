@@ -52,7 +52,6 @@ module.exports={
 
     //secret resource api (access: superUser)
     secret: async(req,res,next)=>{
-
         const user=req.user;
         if (user.isSuperUser) {
             res.json({ 
@@ -65,12 +64,10 @@ module.exports={
                 authorization: "Not super user"
              });
         }
-           
     },
 
     //get all user api (access: all)
     getAllUsers: async(req,res,next)=>{
-
         const users=await User.find({})
         if(users){
             res.status(200).json({
@@ -81,13 +78,11 @@ module.exports={
                 message: "No users found"
             })
         }
-
     },
 
     
     //get particular user api (access: all)
-    getParticulerUser: async(req,res,next)=>{
-
+    getUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
         const user=await User.findOne({_id: userId})
@@ -100,6 +95,71 @@ module.exports={
                 message: "User not found"
             })
         }
-
     },
+
+    //get user by instituteId api (access: all)
+    getUserByInstituteId: async(req,res,next)=>{
+        const instituteId = req.params.instituteId;
+
+        const user=await User.findOne({instituteId: instituteId})
+        if(user){
+            res.status(200).json({
+                user: user
+            })
+        } else {
+            res.status(404).json({
+                message: "User not found"
+            })
+        }
+    },
+
+    //get users by batch api (access: all)
+    getUsersByBatch: async(req,res,next)=>{
+        const batch = req.params.batch;
+
+        const users=await User.find({batch: batch})
+        if(users){
+            res.status(200).json({
+                users: users
+            })
+        } else {
+            res.status(404).json({
+                message: "Users not found"
+            })
+        }
+    },
+
+    //get users by branch api (access: all)
+    getUsersByBranch: async(req,res,next)=>{
+        const branch = req.params.branch;
+
+        const users=await User.find({branch: branch})
+        if(users){
+            res.status(200).json({
+                users: users
+            })
+        } else {
+            res.status(404).json({
+                message: "Users not found"
+            })
+        }
+    },
+
+    //get user by rollno api (access: all)
+    getUserByRollno: async(req,res,next)=>{
+        const rollno = req.params.rollno;
+
+        const user=await User.findOne({rollno: rollno})
+        if(user){
+            res.status(200).json({
+                user: user
+            })
+        } else {
+            res.status(404).json({
+                message: "User not found"
+            })
+        }
+    },
+    
+
 }

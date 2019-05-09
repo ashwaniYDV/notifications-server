@@ -26,6 +26,22 @@ const userSchema = new Schema({
     type : Array , 
     "default" : []
   },
+  instituteId: {
+    type: String,
+    required: true
+  },
+  batch: {
+    type: String,
+    required: true
+  },
+  branch: {
+    type: String,
+    required: true
+  },
+  rollno: {
+    type: String,
+    required: true
+  },
   registerDate: {
     type: Date,
     default: Date.now
