@@ -37,8 +37,8 @@ router.route('/batch/:batch')
 router.route('/branch/:branch')
     .get(UsersControllers.getUsersByBranch)
 
+router.route('/batchAndBranch/:batch/:branch')
+    .get(UsersControllers.getUsersByBatchAndBranch)
 
-router.route('/rollno/:rollno')
-    .get(UsersControllers.getUserByRollno)
 
 module.exports=router;
