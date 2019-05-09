@@ -13,6 +13,8 @@ signToken=(user)=>{
 }
 
 module.exports={
+
+    //signup api (access: all)
     signUp: async(req,res,next)=>{
         const {email,password,name}=req.value.body;
 
@@ -36,6 +38,7 @@ module.exports={
         })
     },
 
+    //signin api (access: all)
     signIn: async(req,res,next)=>{
         //generate token
         const user=req.user;
@@ -47,6 +50,7 @@ module.exports={
         });
     },
 
+    //secret resource api (access: superUser)
     secret: async(req,res,next)=>{
 
         const user=req.user;
@@ -62,5 +66,40 @@ module.exports={
              });
         }
            
+    },
+
+    //get all user api (access: all)
+    getAllUsers: async(req,res,next)=>{
+
+        const users=await User.find({})
+        if(users){
+            res.status(200).json({
+                users: users
+            })
+        } else {
+            res.status(404).json({
+                message: "No users found"
+            })
+        }
+
+    },
+
+    
+    //get particular user api (access: all)
+    getParticulerUser: async(req,res,next)=>{
+
+        const userId = req.params.userId;
+
+        const user=await User.findOne({_id: userId})
+        if(user){
+            res.status(200).json({
+                user: user
+            })
+        } else {
+            res.status(404).json({
+                message: "User not found"
+            })
+        }
+
     },
 }
