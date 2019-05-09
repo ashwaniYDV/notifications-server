@@ -25,7 +25,11 @@ module.exports={
             password: Joi.string().required(),
             name: Joi.string().required(),
             isSuperUser: Joi.boolean().required(),
-            por: Joi.array().required()
+            por: Joi.array().required(),
+            instituteId: Joi.string().required(),
+            batch: Joi.string().required(),
+            branch: Joi.string().required(),
+            rollno: Joi.string().required()
         })
     }
 }
