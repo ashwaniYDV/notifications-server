@@ -6,6 +6,7 @@ signToken=(user)=>{
     return JWT.sign({
         iss: 'ashwani',
         sub: user.id, //here id and _id both are same(mongodb generated id)
+        isSuperUser: user.isSuperUSer,
         iat: new Date().getTime(), //current time
         exp: new Date().setDate(new Date().getDate()+1) //current time +1 day ahead
     },JWT_SECRET)
@@ -47,11 +48,19 @@ module.exports={
     },
 
     secret: async(req,res,next)=>{
-        console.log('i managed to get here');
-        
-        res.json({ 
-            secret: "Secret Resource",
-            user: req.user
-         });
+
+        const user=req.user;
+        if (user.isSuperUser) {
+            res.json({ 
+                secret: "Secret Resource",
+                user: user
+             });
+        } else {
+            res.json({ 
+                secret: "Secret Resource",
+                authorization: "Not super user"
+             });
+        }
+           
     },
 }

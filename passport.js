@@ -19,7 +19,7 @@ passport.use(new JwtStrategy({
         if(!user){
             return done(null,false);
         }
-        
+
         //otherwise return the user
         done(null,user);
     }

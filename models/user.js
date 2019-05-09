@@ -16,6 +16,15 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: true
+  },
+  isSuperUser: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  registerDate: {
+    type: Date,
+    default: Date.now
   }
 });
 
