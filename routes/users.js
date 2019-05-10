@@ -21,12 +21,12 @@ router.route('/secret')
 
 //localhost:3000/users/
 router.route('/')
-    .get(UsersControllers.getAllUsers)
+    .get(passport.authenticate('jwt',{session: false}),UsersControllers.getAllUsers)
 
 //localhost:3000/users/:id
 router.route('/:userId')
-    .get(UsersControllers.getUser)
-    .patch(validateBody(schemas.userSchemaPatch), UsersControllers.patchUser)
+    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUser)
+    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.userSchemaPatch), UsersControllers.patchUser)
 
 
 router.route('/instituteId/:instituteId')
