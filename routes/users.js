@@ -2,7 +2,7 @@
 //const router=express.Router();
 const router=require('express-promise-router')();
 const UsersControllers=require('../controllers/users');
-const {validateBody,schemas}=require('../helpers/routeHelpers');
+const {validateBody,schemas}=require('../helpers/usersRouteHelpers');
 const passport=require('passport');
 const passportConf=require('../passport');
 
