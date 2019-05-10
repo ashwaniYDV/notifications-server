@@ -26,7 +26,7 @@ router.route('/')
 //localhost:3000/users/:id
 router.route('/:userId')
     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUser)
-    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.userSchemaPatch), UsersControllers.patchUser)
+    .patch(passport.authenticate('jwt',{session: false}), validateBodySignUp(schemas.userSchemaPatch), UsersControllers.patchUser)
 
 
 router.route('/instituteId/:instituteId')

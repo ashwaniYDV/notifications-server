@@ -61,8 +61,7 @@ module.exports={
              });
         } else {
             res.json({ 
-                secret: "Secret Resource",
-                authorization: "Not super user"
+                Message: "Not super user"
              });
         }
     },
