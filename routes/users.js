@@ -26,6 +26,7 @@ router.route('/')
 //localhost:3000/users/:id
 router.route('/:userId')
     .get(UsersControllers.getUser)
+    .patch(validateBody(schemas.userSchemaPatch), UsersControllers.patchUser)
 
 
 router.route('/instituteId/:instituteId')

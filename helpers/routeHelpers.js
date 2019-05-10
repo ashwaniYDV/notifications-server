@@ -14,7 +14,9 @@ module.exports={
             next();
         }
     },
+    
 
+    //valiadtion schemas
     schemas: {
         authSchemaSignIn: Joi.object().keys({
             email: Joi.string().email().required(),
@@ -30,6 +32,17 @@ module.exports={
             batch: Joi.string().required(),
             branch: Joi.string().required(),
             rollno: Joi.string().required()
-        })
+        }),
+        userSchemaPatch: Joi.object().keys({
+            email: Joi.string().email(),
+            password: Joi.string(),
+            name: Joi.string(),
+            isSuperUser: Joi.boolean(),
+            por: Joi.array(),
+            instituteId: Joi.string(),
+            batch: Joi.string(),
+            branch: Joi.string(),
+            rollno: Joi.string()
+        }),
     }
 }
