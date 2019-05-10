@@ -28,7 +28,8 @@ const userSchema = new Schema({
   },
   instituteId: {
     type: String,
-    required: true
+    required: true,
+    lowercase: true
   },
   batch: {
     type: String,
@@ -36,7 +37,8 @@ const userSchema = new Schema({
   },
   branch: {
     type: String,
-    required: true
+    required: true,
+    lowercase: true
   },
   rollno: {
     type: String,

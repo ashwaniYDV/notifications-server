@@ -1,6 +1,7 @@
 const JWT=require('jsonwebtoken');
 const User=require('../models/user');
 const {JWT_SECRET}=require('../configs/config');
+const bcrypt = require("bcryptjs");
 
 signToken=(user)=>{
     return JWT.sign({
@@ -90,6 +91,32 @@ module.exports={
             res.status(200).json({
                 user: user
             })
+        } else {
+            res.status(404).json({
+                message: "User not found"
+            })
+        }
+    },
+
+    //patch particular user api (access: all)
+    patchUser: async(req,res,next)=>{
+        const userId = req.params.userId;
+        const pwd=req.value.body.password;
+
+        //generate a salt
+        const salt = await bcrypt.genSalt(10);
+        //generate a password hash(salt+hash)
+        const passwordHash = await bcrypt.hash(pwd, salt);
+        //reassign hashed version over original plain text password
+        req.value.body.password = passwordHash;
+
+        const user=await User.findOne({_id: userId});
+        if(user){
+            User.findByIdAndUpdate({_id: userId},req.value.body,{new:true}).then((updatedUser)=>{
+                res.status(200).json({
+                    user: updatedUser
+                });
+            });
         } else {
             res.status(404).json({
                 message: "User not found"
