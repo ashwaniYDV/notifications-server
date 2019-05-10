@@ -6,6 +6,7 @@ const cors=require('cors');
 const {mongoURI}=require('./configs/config');
 
 const users=require('./routes/users');
+const feeds=require('./routes/feeds');
 
 const app=express();
 
@@ -31,6 +32,7 @@ app.use(bodyParser.json());
 
 //Routes
 app.use('/users',users);
+app.use('/feeds',feeds);
 
 //Catch 404 errors and forward them to error handelers
 app.use((req,res,next)=>{

@@ -1,8 +1,45 @@
 const Joi=require('joi');
 
 module.exports={
+
     validateBody: (schema)=>{
         return (req,res,next)=>{
+            
+            const result=Joi.validate(req.body,schema);
+            if(result.error){
+                return res.status(400).json(result.error)
+            }
+            if(!req.value){
+                req.value={}
+            }
+            req.value['body']=result.value;
+            next();
+        }
+    },
+
+    validateBodySignUp: (schema)=>{
+        return (req,res,next)=>{
+            const instituteId=req.body.instituteId;
+            req.body.batch=instituteId.substring(0,4);
+            req.body.branch=instituteId.slice(4,6);
+            req.body.rollno=instituteId.substring(6);
+
+
+            const result=Joi.validate(req.body,schema);
+            if(result.error){
+                return res.status(400).json(result.error)
+            }
+            if(!req.value){
+                req.value={}
+            }
+            req.value['body']=result.value;
+            next();
+        }
+    },
+
+    validateBodySignIn: (schema)=>{
+        return (req,res,next)=>{
+
             const result=Joi.validate(req.body,schema);
             if(result.error){
                 return res.status(400).json(result.error)
@@ -29,9 +66,9 @@ module.exports={
             isSuperUser: Joi.boolean().required(),
             por: Joi.array().required(),
             instituteId: Joi.string().required(),
-            batch: Joi.string().required(),
-            branch: Joi.string().required(),
-            rollno: Joi.string().required()
+            batch: Joi.string(),
+            branch: Joi.string(),
+            rollno: Joi.string()
         }),
         userSchemaPatch: Joi.object().keys({
             email: Joi.string().email(),

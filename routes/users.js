@@ -2,18 +2,18 @@
 //const router=express.Router();
 const router=require('express-promise-router')();
 const UsersControllers=require('../controllers/users');
-const {validateBody,schemas}=require('../helpers/usersRouteHelpers');
+const {validateBody,validateBodySignUp,validateBodySignIn,schemas}=require('../helpers/usersRouteHelpers');
 const passport=require('passport');
 const passportConf=require('../passport');
 
 
 //localhost:3000/users/signup
 router.route('/signUp')
-    .post(validateBody(schemas.authSchemaSignUp),UsersControllers.signUp)
+    .post(validateBodySignUp(schemas.authSchemaSignUp),UsersControllers.signUp)
 
 //localhost:3000/users/signin    
 router.route('/signIn')
-    .post(validateBody(schemas.authSchemaSignIn), passport.authenticate('local',{session: false}), UsersControllers.signIn)
+    .post(validateBodySignIn(schemas.authSchemaSignIn), passport.authenticate('local',{session: false}), UsersControllers.signIn)
 
 //localhost:3000/users/secret
 router.route('/secret')
@@ -26,7 +26,7 @@ router.route('/')
 //localhost:3000/users/:id
 router.route('/:userId')
     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUser)
-    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.userSchemaPatch), UsersControllers.patchUser)
+    .patch(passport.authenticate('jwt',{session: false}), validateBodySignUp(schemas.userSchemaPatch), UsersControllers.patchUser)
 
 
 router.route('/instituteId/:instituteId')

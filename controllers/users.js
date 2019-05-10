@@ -61,8 +61,7 @@ module.exports={
              });
         } else {
             res.json({ 
-                secret: "Secret Resource",
-                authorization: "Not super user"
+                Message: "Not super user"
              });
         }
     },
@@ -101,27 +100,36 @@ module.exports={
     //patch particular user api (access: all)
     patchUser: async(req,res,next)=>{
         const userId = req.params.userId;
-        const pwd=req.value.body.password;
 
-        //generate a salt
-        const salt = await bcrypt.genSalt(10);
-        //generate a password hash(salt+hash)
-        const passwordHash = await bcrypt.hash(pwd, salt);
-        //reassign hashed version over original plain text password
-        req.value.body.password = passwordHash;
+        if (userId==req.user._id) {
+            const pwd=req.value.body.password;
 
-        const user=await User.findOne({_id: userId});
-        if(user){
-            User.findByIdAndUpdate({_id: userId},req.value.body,{new:true}).then((updatedUser)=>{
-                res.status(200).json({
-                    user: updatedUser
+            //generate a salt
+            const salt = await bcrypt.genSalt(10);
+            //generate a password hash(salt+hash)
+            const passwordHash = await bcrypt.hash(pwd, salt);
+            //reassign hashed version over original plain text password
+            req.value.body.password = passwordHash;
+
+            const user=await User.findOne({_id: userId});
+            if(user){
+                User.findByIdAndUpdate({_id: userId},req.value.body,{new:true}).then((updatedUser)=>{
+                    res.status(200).json({
+                        user: updatedUser
+                    });
                 });
-            });
+            } else {
+                res.status(404).json({
+                    message: "User not found"
+                })
+            }
         } else {
-            res.status(404).json({
-                message: "User not found"
+            res.status(401).json({
+                message: "User not authorized"
             })
         }
+
+        
     },
 
     //get user by instituteId api (access: all)
