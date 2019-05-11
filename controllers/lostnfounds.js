@@ -22,7 +22,7 @@ module.exports={
     postLostnfound: async(req,res,next)=>{
 
         //create a new lostnfound
-        const lostnfound=new Lostnfound(req.body);
+        const lostnfound=new Lostnfound(req.value.body);
         await lostnfound.save();
         //response
         res.status(200).json({
@@ -66,6 +66,26 @@ module.exports={
             })
         }
         
-    },    
+    },
+
+
+    //update(patch) lostnfound with lostnfoundId api (access: all)
+    patchLostnfound: async(req,res,next)=>{
+        const lostnfoundId=req.params.lostnfoundId;
+
+        const lostnfound=await Lostnfound.findOne({_id: lostnfoundId})
+        if(lostnfound){
+            Lostnfound.findByIdAndUpdate({_id: lostnfoundId},req.value.body,{new:true}).then((updatedLostnfound)=>{
+                res.status(200).json({
+                    updatedLostnfound: updatedLostnfound
+                });
+            });
+        } else {
+            res.status(404).json({
+                message: "No lostnfound found"
+            })
+        }
+        
+    },
 
 }
