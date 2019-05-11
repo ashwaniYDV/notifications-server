@@ -57,8 +57,9 @@ module.exports={
     //get all feeds with timestamp greater than query timestamp api (access: all)
     getAllFeedsWithTimestamp: async(req,res,next)=>{
         const timestamp=req.params.timestamp;
+        const query=parseInt(timestamp);
 
-        const feeds=await Feed.find({})
+        const feeds=await Feed.find({eventDate: {$gt: query} })
         if(feeds){
             res.status(200).json({
                 feeds: feeds
@@ -71,6 +72,25 @@ module.exports={
         
     },
     
+    
+    //get all feeds whose evenId is greater than current timestamp api (access: all)
+    getLatestFeedsWithCurrentTimestamp: async(req,res,next)=>{
+        const timestamp=req.params.timestamp;
+        const query=parseInt(timestamp);
+
+        const latestFeeds=await Feed.find({eventId: {$gt: query} })
+        if(latestFeeds){
+            res.status(200).json({
+                latestFeeds: latestFeeds
+            })
+        } else {
+            res.status(404).json({
+                message: "No feeds found"
+            })
+        }
+        
+    },
+
     //post a feed api (access: all)
     postFeed: async(req,res,next)=>{
 
