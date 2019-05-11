@@ -15,6 +15,7 @@ router.route('/')
 router.route('/:lostnfoundId')
     .get(LostnfoundsControllers.getLostnfound)
     .delete(LostnfoundsControllers.deleteLostnfound)
+    .patch(LostnfoundsControllers.patchLostnfound)
 
     /*
 //localhost:3000/feeds/timestamp/:timestamp
