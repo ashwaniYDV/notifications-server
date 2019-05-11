@@ -30,16 +30,16 @@ router.route('/:userId')
 
 
 router.route('/instituteId/:instituteId')
-    .get(UsersControllers.getUserByInstituteId)
+    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUserByInstituteId)
 
 router.route('/batch/:batch')
-    .get(UsersControllers.getUsersByBatch)
+    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatch)
 
 router.route('/branch/:branch')
-    .get(UsersControllers.getUsersByBranch)
+    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBranch)
 
 router.route('/batchAndBranch/:batch/:branch')
-    .get(UsersControllers.getUsersByBatchAndBranch)
+    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatchAndBranch)
 
 
 module.exports=router;
