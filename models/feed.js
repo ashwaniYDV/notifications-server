@@ -19,11 +19,11 @@ const feedSchema = new Schema({
     },
     eventDate: {
         type:Number, 
-        default: new Date().getTime()
+        required: true
     },
     eventId: {
         type:Number, 
-        default: new Date().getTime()
+        default: new Date().getTime()    //this is the time when post request is made
     },
     speakersGuests : { 
         type : Array , 

@@ -61,7 +61,7 @@ module.exports={
              });
         } else {
             res.json({ 
-                Message: "Not super user"
+                message: "Not super user"
              });
         }
     },
