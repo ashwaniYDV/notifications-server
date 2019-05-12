@@ -19,12 +19,11 @@ const userSchema = new Schema({
   },
   isSuperUser: {
     type: Boolean,
-    required: true,
-    default: false,
+    dafault: false
   },
   por : { 
-    type : Array , 
-    "default" : []
+    type : Array, 
+    default : []
   },
   instituteId: {
     type: String,
