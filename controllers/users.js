@@ -25,6 +25,12 @@ module.exports={
             return res.status(403).json({error: "email is already taken"});
         }
         
+        //initially setting isSuperUserProperty to false(this can be set true from database only)
+        req.value.body.isSuperUser=false;
+
+        //initially setting por to empty array (this can be set by admin only)
+        req.value.body.por=[];
+
         //create a new user
         const newUser=new User(req.value.body);
         await newUser.save();
@@ -101,7 +107,7 @@ module.exports={
     patchUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
-        if (userId==req.user._id) {
+        if (userId==req.user._id || req.user.isSuperUser==true) {
             const pwd=req.value.body.password;
 
             //generate a salt
@@ -110,6 +116,11 @@ module.exports={
             const passwordHash = await bcrypt.hash(pwd, salt);
             //reassign hashed version over original plain text password
             req.value.body.password = passwordHash;
+
+            //setting isSuperUser value to false if user is not admin
+            if(!req.user.isSuperUSer) {
+                req.value.body.isSuperUser=false;
+            }
 
             const user=await User.findOne({_id: userId});
             if(user){
