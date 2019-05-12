@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const lostnfoundSchema = new Schema({
+    lostnfoundPoster: {
+        type: String, //instituteId
+        required: true
+    },
     lostStatus: {
         type: Number,    //itemLost=1, itemFound=2, itemRecovered=3
         required: true

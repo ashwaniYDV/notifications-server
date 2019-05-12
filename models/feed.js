@@ -2,15 +2,19 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const feedSchema = new Schema({
+    feedPoster: {
+        type: String, //instituteId
+        required: true
+    },
     eventVenue: {
         type: String,
         required: true
     },
-    title: {
+    eventName: {
         type: String,
         required: true
     },
-    description: {
+    eventDescription: {
         type: String,
         required: true
     },
@@ -25,15 +29,15 @@ const feedSchema = new Schema({
         type:Number, 
         default: new Date().getTime()    //this is the time when post request is made
     },
-    speakersGuests : { 
+    guests : { 
         type : Array , 
         "default" : []
     },
-    eventCoordinators : { 
+    coordinators : { 
         type : Array , 
         "default" : []
     },
-    socialMediaPosts : { 
+    postLinks : { 
         type : Array , 
         "default" : []
     }
