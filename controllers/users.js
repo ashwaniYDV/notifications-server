@@ -124,6 +124,10 @@ module.exports={
 
             const user=await User.findOne({_id: userId});
             if(user){
+                //restricting user to add pors if he/she is not superUser while updating his profile
+                if(user.por.length==0 && req.user.isSuperUSer==false) {
+                    req.value.body.por=[];
+                }
                 User.findByIdAndUpdate({_id: userId},req.value.body,{new:true}).then((updatedUser)=>{
                     res.status(200).json({
                         user: updatedUser
