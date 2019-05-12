@@ -2,7 +2,7 @@ const Feed=require('../models/feed');
 
 module.exports={
 
-    //get all feeds api (access: all)
+    //get all feeds api (access: auth users)
     getAllFeeds: async(req,res,next)=>{
         const feeds=await Feed.find({})
         if(feeds){
@@ -18,7 +18,7 @@ module.exports={
     },
 
 
-    //post a feed api (access: all)
+    //post a feed api (access: auth users)
     postFeed: async(req,res,next)=>{
 
         //create a new feed
@@ -31,7 +31,7 @@ module.exports={
         
     },
 
-    //get feed with feedId api (access: all)
+    //get feed with feedId api (access: auth users)
     getFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
 
@@ -49,7 +49,7 @@ module.exports={
     },
 
 
-    //delete feed using feedId if instituteId of auth user=feedPoster   api (access: all)
+    //delete feed using feedId if instituteId of auth user=feedPoster   api (access: feedPoster, superUser)
     deleteFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
         instituteId=req.user.instituteId;
@@ -76,7 +76,34 @@ module.exports={
         
     },
 
-    //get all feeds with timestamp greater than query timestamp api (access: all)
+    //update(patch) feed with feedId api (access: feedPoster, superUer)
+    patchFeedWithFeedId: async(req,res,next)=>{
+        const feedId=req.params.feedId;
+        const instituteId=req.user.instituteId;
+
+        const feed=await Feed.findOne({_id: feedId})
+        if(feed){
+            if(feed.feedPoster==instituteId || req.user.isSuperUser==true) {
+                Feed.findByIdAndUpdate({_id: feedId},req.value.body,{new:true}).then((updatedFeed)=>{
+                    res.status(200).json({
+                        updatedFeed: updatedFeed
+                    });
+                });
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized update request" 
+                });
+            }
+            
+        } else {
+            res.status(404).json({
+                message: "No feed found"
+            })
+        }
+        
+    },
+
+    //get all feeds with timestamp greater than query timestamp api (access: auth suers)
     getAllFeedsWithTimestamp: async(req,res,next)=>{
         const timestamp=req.params.timestamp;
         const query=parseInt(timestamp);
@@ -95,7 +122,7 @@ module.exports={
     },
     
     
-    //get all feeds whose evenId is greater than current timestamp api (access: all)
+    //get all feeds whose evenId is greater than current timestamp api (access: auth users)
     getLatestFeedsWithCurrentTimestamp: async(req,res,next)=>{
         const timestamp=req.params.timestamp;
         const query=parseInt(timestamp);

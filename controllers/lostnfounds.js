@@ -2,7 +2,7 @@ const Lostnfound=require('../models/lostnfound');
 
 module.exports={
 
-    //get all lostnfounds api (access: all)
+    //get all lostnfounds api (access: auth users)
     getAllLostnfounds: async(req,res,next)=>{
         const lostnfounds=await Lostnfound.find({})
         if(lostnfounds){
@@ -18,7 +18,7 @@ module.exports={
     },
 
 
-    //post a lostnfound api (access: all)
+    //post a lostnfound api (access: auth users)
     postLostnfound: async(req,res,next)=>{
 
         //create a new lostnfound
@@ -32,7 +32,7 @@ module.exports={
     },
 
 
-    //delete a lostnfound with lostnfoundId api (access: all)
+    //delete a lostnfound with lostnfoundId api (access: lostnfoundPoster, superUer)
     deleteLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
         instituteId=req.user.instituteId;
@@ -59,7 +59,7 @@ module.exports={
     },
 
 
-    //get lostnfound with lostnfoundId api (access: all)
+    //get lostnfound with lostnfoundId api (access: auth users)
     getLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
 
@@ -77,17 +77,25 @@ module.exports={
     },
 
 
-    //update(patch) lostnfound with lostnfoundId api (access: all)
+    //update(patch) lostnfound with lostnfoundId api (access: lostnfoundPoster, superUer)
     patchLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
+        const instituteId=req.user.instituteId;
 
         const lostnfound=await Lostnfound.findOne({_id: lostnfoundId})
         if(lostnfound){
-            Lostnfound.findByIdAndUpdate({_id: lostnfoundId},req.value.body,{new:true}).then((updatedLostnfound)=>{
-                res.status(200).json({
-                    updatedLostnfound: updatedLostnfound
+            if(lostnfound.lostnfoundPoster==instituteId || req.user.isSuperUser==true) {
+                Lostnfound.findByIdAndUpdate({_id: lostnfoundId},req.value.body,{new:true}).then((updatedLostnfound)=>{
+                    res.status(200).json({
+                        updatedLostnfound: updatedLostnfound
+                    });
                 });
-            });
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized delete request" 
+                });
+            }
+            
         } else {
             res.status(404).json({
                 message: "No lostnfound found"
