@@ -66,7 +66,7 @@ module.exports={
         }
     },
 
-    //get all user api (access: all)
+    //get all user api (access: auth users)
     getAllUsers: async(req,res,next)=>{
         const users=await User.find({})
         if(users){
@@ -81,7 +81,7 @@ module.exports={
     },
 
     
-    //get particular user api (access: all)
+    //get particular user api (access: auth users)
     getUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
@@ -97,7 +97,7 @@ module.exports={
         }
     },
 
-    //patch particular user api (access: all)
+    //patch particular user api (access: same user)
     patchUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
@@ -132,7 +132,7 @@ module.exports={
         
     },
 
-    //get user by instituteId api (access: all)
+    //get user by instituteId api (access: auth users)
     getUserByInstituteId: async(req,res,next)=>{
         const instituteId = req.params.instituteId;
 
@@ -148,7 +148,7 @@ module.exports={
         }
     },
 
-    //get users by batch api (access: all)
+    //get users by batch api (access: auth users)
     getUsersByBatch: async(req,res,next)=>{
         const batch = req.params.batch;
 
@@ -164,7 +164,7 @@ module.exports={
         }
     },
 
-    //get users by branch api (access: all)
+    //get users by branch api (access: auth users)
     getUsersByBranch: async(req,res,next)=>{
         const branch = req.params.branch;
 
@@ -180,7 +180,7 @@ module.exports={
         }
     },
 
-    //get users by batch and branch api (access: all)
+    //get users by batch and branch api (access: auth users)
     getUsersByBatchAndBranch: async(req,res,next)=>{
 
         const batch = req.params.batch;
