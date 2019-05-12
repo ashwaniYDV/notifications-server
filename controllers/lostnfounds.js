@@ -35,13 +35,21 @@ module.exports={
     //delete a lostnfound with lostnfoundId api (access: all)
     deleteLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
+        instituteId=req.user.instituteId;
 
         const lostnfound=await Lostnfound.findOne({_id: lostnfoundId})
         if(lostnfound){
-            await Lostnfound.findByIdAndRemove({_id: lostnfoundId});
-            res.status(200).json({
-                message: "Lostnfound deleted"
-            });
+            if(lostnfound.lostnfoundPoster==instituteId || req.user.isSuperUser==true) {
+                await Lostnfound.findByIdAndRemove({_id: lostnfoundId});
+                res.status(200).json({
+                    message: "Lostnfound deleted"
+                });
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized delete request" 
+                });
+            }
+            
         } else {
             res.status(404).json({
                 message: "No lostnfound found"

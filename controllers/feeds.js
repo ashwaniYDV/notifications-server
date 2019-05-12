@@ -18,6 +18,19 @@ module.exports={
     },
 
 
+    //post a feed api (access: all)
+    postFeed: async(req,res,next)=>{
+
+        //create a new feed
+        const feed=new Feed(req.value.body);
+        await feed.save();
+        //response
+        res.status(200).json({
+            feed: feed
+        })
+        
+    },
+
     //get feed with feedId api (access: all)
     getFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
@@ -36,16 +49,25 @@ module.exports={
     },
 
 
-    //delete feed with feedId api (access: all)
+    //delete feed using feedId if instituteId of auth user=feedPoster   api (access: all)
     deleteFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
+        instituteId=req.user.instituteId;
+
 
         const feed=await Feed.findOne({_id: feedId})
         if(feed){
-            await Feed.findByIdAndRemove({_id: feedId});
-            res.status(200).json({
-                message: "Feed deleted" 
-            });
+            if(feed.feedPoster==instituteId || req.user.isSuperUser==true) {
+                await Feed.findByIdAndRemove({_id: feedId});
+                res.status(200).json({
+                    message: "Feed deleted" 
+                });
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized delete request" 
+                });
+            }
+            
         } else {
             res.status(404).json({
                 message: "No feed found"
@@ -88,19 +110,6 @@ module.exports={
                 message: "No feeds found"
             })
         }
-        
-    },
-
-    //post a feed api (access: all)
-    postFeed: async(req,res,next)=>{
-
-        //create a new feed
-        const feed=new Feed(req.value.body);
-        await feed.save();
-        //response
-        res.status(200).json({
-            feed: feed
-        })
         
     },
     
