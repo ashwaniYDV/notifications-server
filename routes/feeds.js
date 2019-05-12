@@ -16,6 +16,7 @@ router.route('/')
 router.route('/:feedId')
     .get(passport.authenticate('jwt',{session: false}), FeedsControllers.getFeedWithFeedId)
     .delete(passport.authenticate('jwt',{session: false}), FeedsControllers.deleteFeedWithFeedId)
+    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.feedSchema), FeedsControllers.patchFeedWithFeedId)
 
 //localhost:3000/feeds/timestamp/:timestamp
 //get all feeds whose evenDate is greater than query timestamp
