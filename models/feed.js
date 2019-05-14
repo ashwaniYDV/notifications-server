@@ -26,8 +26,8 @@ const feedSchema = new Schema({
         required: true
     },
     eventId: {
-        type:Number, 
-        default: new Date().getTime()    //this is the time when post request is made
+        type:Number,
+        default: new Date().getT
     },
     coordinators : { 
         type : Array , 
