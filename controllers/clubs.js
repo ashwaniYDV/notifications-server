@@ -18,7 +18,7 @@ module.exports={
     },
 
 
-    //post a feed api (access: auth users)
+    //post a club api (access: auth users)
     postClub: async(req,res,next)=>{
 
         //create a new feed
@@ -32,7 +32,7 @@ module.exports={
     },
 
 
-    //get feed with feedId api (access: auth users)
+    //get club with clubId api (access: auth users)
     getClubWithClubId: async(req,res,next)=>{
         const clubId=req.params.clubId;
 
@@ -50,7 +50,7 @@ module.exports={
     },
 
 
-    //delete feed using feedId if instituteId of auth user=feedPoster   api (access: feedPoster, superUser)
+    //delete club using clubId api (access: superUser)
     deleteClubWithClubId: async(req,res,next)=>{
         const clubId=req.params.clubId;
 
@@ -76,7 +76,7 @@ module.exports={
     },
 
 
-    //update(patch) feed with feedId api (access: feedPoster, superUer)
+    //update(patch) club with clubId api (access: superUer)
     patchClubWithClubId: async(req,res,next)=>{
         const clubId=req.params.clubId;
 

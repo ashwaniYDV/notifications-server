@@ -7,13 +7,13 @@ const passport=require('passport');
 const passportConf=require('../passport');
 
 
-//localhost:3000/feeds/
+//localhost:3000/clubs/
 router.route('/')
     .get(ClubsControllers.getAllClubs)
     .post(validateBody(schemas.clubSchema), ClubsControllers.postClub)
 
 
-//localhost:3000/feeds/:feedId
+//localhost:3000/clubs/:clubId
 router.route('/:clubId')
     .get(ClubsControllers.getClubWithClubId)
     .delete(passport.authenticate('jwt',{session: false}), ClubsControllers.deleteClubWithClubId)
