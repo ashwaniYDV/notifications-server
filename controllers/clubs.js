@@ -22,7 +22,7 @@ module.exports={
     postClub: async(req,res,next)=>{
 
         //create a new feed
-        const club=new Club(req.body);
+        const club=new Club(req.value.body);
         await club.save();
         //response
         res.status(200).json({
@@ -83,7 +83,7 @@ module.exports={
         const club=await Club.findOne({_id: clubId})
         if(club){
             if(req.user.isSuperUser==true) {
-                Club.findByIdAndUpdate({_id: clubId},req.body,{new:true}).then((updatedClub)=>{
+                Club.findByIdAndUpdate({_id: clubId},req.value.body,{new:true}).then((updatedClub)=>{
                     res.status(200).json({
                         updatedClub: updatedClub
                     });
