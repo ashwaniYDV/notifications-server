@@ -5,6 +5,7 @@ module.exports={
     validateBody: (schema)=>{
         return (req,res,next)=>{
             
+            req.body.eventId=new Date().getTime();
             const result=Joi.validate(req.body,schema);
             if(result.error){
                 return res.status(400).json(result.error)
@@ -25,6 +26,7 @@ module.exports={
             eventVenue: Joi.string().required(),
             eventName: Joi.string().required(),
             eventDescription: Joi.string().required(),
+            eventId: Joi.number(),
             eventImageUrl: Joi.string(),
             coordinators: Joi.array(),
             postLinks: Joi.array(),
