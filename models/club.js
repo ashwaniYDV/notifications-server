@@ -12,10 +12,10 @@ const clubSchema = new Schema({
     description: {
         type: String
     },
-    followed: {    //issue
-        type: Boolean,
-        default: false
-    }
+    followers: {
+        type: Number,
+        default: 0
+    },
     coordinators: {
         type : Array , 
         default : []
@@ -38,7 +38,7 @@ const clubSchema = new Schema({
     image: {
         type: String
     }
-
+});
 
 const Club = mongoose.model("club", clubSchema);
 module.exports = Club;

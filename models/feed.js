@@ -29,10 +29,6 @@ const feedSchema = new Schema({
         type:Number, 
         default: new Date().getTime()    //this is the time when post request is made
     },
-    guests : { 
-        type : Array , 
-        "default" : []
-    },
     coordinators : { 
         type : Array , 
         "default" : []

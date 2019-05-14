@@ -26,7 +26,6 @@ module.exports={
             eventName: Joi.string().required(),
             eventDescription: Joi.string().required(),
             eventImageUrl: Joi.string(),
-            guests: Joi.array(),
             coordinators: Joi.array(),
             postLinks: Joi.array(),
             eventDate: Joi.number().required()
