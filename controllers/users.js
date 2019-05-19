@@ -22,7 +22,7 @@ module.exports={
         //check if there is a user with same email
         const foundUser=await User.findOne({email: email})
         if(foundUser){
-            return res.status(403).json({error: "email is already taken"});
+            return res.status(403).json({message: "email is already taken"});
         }
         
         //initially setting isSuperUserProperty to false(this can be set true from database only)
