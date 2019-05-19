@@ -66,7 +66,7 @@ module.exports={
                 user: user
              });
         } else {
-            res.json({ 
+            res.status(401).json({ 
                 message: "Not super user"
              });
         }
