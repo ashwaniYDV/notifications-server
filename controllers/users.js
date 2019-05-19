@@ -22,7 +22,7 @@ module.exports={
         //check if there is a user with same email
         const foundUser=await User.findOne({email: email})
         if(foundUser){
-            return res.status(403).json({error: "email is already taken"});
+            return res.status(403).json({message: "email is already taken"});
         }
         
         //initially setting isSuperUserProperty to false(this can be set true from database only)
@@ -50,7 +50,6 @@ module.exports={
         //generate token
         const user=req.user;
         const token=signToken(user);
-
         res.status(200).json({
             token: token,
             user: user
@@ -66,7 +65,7 @@ module.exports={
                 user: user
              });
         } else {
-            res.json({ 
+            res.status(401).json({ 
                 message: "Not super user"
              });
         }

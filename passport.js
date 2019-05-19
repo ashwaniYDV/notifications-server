@@ -17,7 +17,7 @@ passport.use(new JwtStrategy({
 
         //if user doesn't exist handle it
         if(!user){
-            return done(null,false);
+            return done({ message: 'Anauthorized user' },false);
         }
 
         //otherwise return the user
@@ -38,7 +38,7 @@ passport.use(new LocalStrategy({
 
         //if not handle it
         if(!user){
-            return done(null,false);
+            return done({ message: 'User not found' }, false,);
         }
 
         //check if the password is correct
@@ -46,7 +46,7 @@ passport.use(new LocalStrategy({
 
         //if not, handle it
         if(!isMatch){
-            return done(null,false);
+            return done({ message: 'Wrong Password' }, false);
         }
 
         //otherwise return the user

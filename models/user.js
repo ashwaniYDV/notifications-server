@@ -21,7 +21,7 @@ const userSchema = new Schema({
     type: Boolean,
     dafault: false
   },
-  por : { 
+  por : {
     type : Array, 
     default : []
   },
