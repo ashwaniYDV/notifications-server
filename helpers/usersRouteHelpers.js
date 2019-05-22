@@ -20,10 +20,11 @@ module.exports={
     validateBodySignUp: (schema)=>{
         return (req,res,next)=>{
             const instituteId=req.body.instituteId;
-            req.body.batch=instituteId.substring(0,4);
-            req.body.branch=instituteId.slice(4,6);
-            req.body.rollno=instituteId.substring(6);
-
+            if(instituteId) {
+                req.body.batch=instituteId.substring(0,4);
+                req.body.branch=instituteId.slice(4,6);
+                req.body.rollno=instituteId.substring(6);
+            }
 
             const result=Joi.validate(req.body,schema);
             if(result.error){
