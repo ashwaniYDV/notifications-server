@@ -8,7 +8,7 @@ const User=require('./models/user')
 
 //JSON WEB TOKENS STRATEGY
 passport.use(new JwtStrategy({
-    jwtFromRequest: ExtractJwt.fromHeader('auth-token'),
+    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
     secretOrKey: JWT_SECRET
 },async(payload,done)=>{
     try{
