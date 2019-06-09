@@ -7,9 +7,8 @@ signToken=(user)=>{
     return JWT.sign({
         iss: 'ashwani',
         sub: user.id, //here id and _id both are same(mongodb generated id)
-        isSuperUser: user.isSuperUSer,
         iat: new Date().getTime(), //current time
-        exp: new Date().setDate(new Date().getDate()+1) //current time +1 day ahead
+        exp: new Date().setDate(new Date().getDate()+30) //current time +30 day ahead
     },JWT_SECRET)
 }
 
