@@ -17,7 +17,7 @@ passport.use(new JwtStrategy({
 
         //if user doesn't exist handle it
         if(!user){
-            return done({ message: 'Anauthorized user' },false);
+            return done({ message: 'Unauthorized user' },false);
         }
 
         //otherwise return the user
