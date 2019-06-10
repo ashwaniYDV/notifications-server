@@ -18,10 +18,9 @@ module.exports={
     signUp: async(req,res,next)=>{
         const {email,password,name}=req.value.body;
 
-        //check if there is a user with same email
         const foundUser=await User.findOne({email: email})
         if(foundUser){
-            return res.status(403).json({message: "email is already taken"});
+            return res.status(403).json({message: "Email is already registered"});
         }
         
         //initially setting isSuperUserProperty to false(this can be set true from database only)
@@ -31,13 +30,11 @@ module.exports={
         req.value.body.por=[];
 
         //create a new user
-        const newUser=new User(req.value.body);
+        const newUser=new User(req.value.body); 
         await newUser.save();
 
-        //generate token
         const token=signToken(newUser);
 
-        //respond with token
         res.status(200).json({
             token: token,
             user: newUser
@@ -59,7 +56,7 @@ module.exports={
     secret: async(req,res,next)=>{
         const user=req.user;
         if (user.isSuperUser) {
-            res.json({ 
+            res.status(200).json({
                 secret: "Secret Resource",
                 user: user
              });
@@ -101,29 +98,29 @@ module.exports={
         }
     },
 
-    //patch particular user api (access: same user)
+    //patch particular user api (access: same user && superUser)
     patchUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
-        if (userId==req.user._id || req.user.isSuperUser==true) {
-            const pwd=req.value.body.password;
-
-            //generate a salt
-            const salt = await bcrypt.genSalt(10);
-            //generate a password hash(salt+hash)
-            const passwordHash = await bcrypt.hash(pwd, salt);
-            //reassign hashed version over original plain text password
-            req.value.body.password = passwordHash;
-
+        // if (userId==req.user._id || req.user.isSuperUser) {
+        if (userId==req.user._id && !req.user.isSuperUser) {
+            if(req.value.body.password!=undefined) {
+                const pwd=req.value.body.password;
+                const salt = await bcrypt.genSalt(10);
+                const passwordHash = await bcrypt.hash(pwd, salt);
+                req.value.body.password = passwordHash;
+            }
+            
             //setting isSuperUser value to false if user is not admin
-            if(!req.user.isSuperUSer) {
+            if(!req.user.isSuperUser) {
                 req.value.body.isSuperUser=false;
             }
+            req.value.body.isSuperUser=false;
 
             const user=await User.findOne({_id: userId});
             if(user){
                 //restricting user to add pors if he/she is not superUser while updating his profile
-                if(user.por.length==0 && req.user.isSuperUSer==false) {
+                if(user.por.length==0) {
                     req.value.body.por=[];
                 }
                 User.findByIdAndUpdate({_id: userId},req.value.body,{new:true}).then((updatedUser)=>{
@@ -136,9 +133,43 @@ module.exports={
                     message: "User not found"
                 })
             }
+        } else if(userId!=req.user._id && req.user.isSuperUser) {
+            var updateData={};
+            if(req.value.body.por!=undefined) {
+                updateData.por=req.value.body.por;
+            }
+            if(req.value.body.isSuperUser!=undefined) {
+                updateData.isSuperUser=req.value.body.isSuperUser;
+            }
+
+            const user=await User.findOne({_id: userId});
+            if(user){
+                User.findByIdAndUpdate({_id: userId}, updateData, {new:true}).then((updatedUser)=>{
+                    res.status(200).json({
+                        user: updatedUser
+                    });
+                });
+            } else {
+                res.status(404).json({
+                    message: "User not found"
+                })
+            }
+        } else if(userId==req.user._id && req.user.isSuperUser) {
+            const user=await User.findOne({_id: userId});
+            if(user){
+                User.findByIdAndUpdate({_id: userId}, req.value.body, {new:true}).then((updatedUser)=>{
+                    res.status(200).json({
+                        user: updatedUser
+                    });
+                });
+            } else {
+                res.status(404).json({
+                    message: "User not found"
+                })
+            }
         } else {
             res.status(401).json({
-                message: "User not authorized"
+                message: "Unauthorized request"
             })
         }
 
