@@ -47,7 +47,7 @@ app.use((req,res,next)=>{
 
 //Error handeler function
 app.use((err,req,res,next)=>{
-    const error=app.get('env')==='development' ? err : {};
+    const error=err;
     const status=err.status||500;
 
     //respond to clients
