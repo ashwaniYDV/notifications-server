@@ -27,7 +27,7 @@ const feedSchema = new Schema({
     },
     eventId: {
         type:Number,
-        default: new Date().getT
+        default: new Date().getTime()
     },
     coordinators : { 
         type : Array , 
