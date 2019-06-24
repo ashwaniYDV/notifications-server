@@ -52,9 +52,7 @@ app.use((err,req,res,next)=>{
 
     //respond to clients
     res.status(status).json({
-        error:{
-            message: error.message
-        }
+        message: error.message
     });
 
     //respond to ourselves
