@@ -21,7 +21,7 @@ module.exports={
     //valiadtion schemas
     schemas: {
         clubSchema: Joi.object().keys({
-            name: Joi.string().required(),
+            name: Joi.string(),
             bio: Joi.string(),
             description: Joi.string(),
             followers: Joi.number(),

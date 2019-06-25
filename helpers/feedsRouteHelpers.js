@@ -22,15 +22,15 @@ module.exports={
     //valiadtion schemas
     schemas: {
         feedSchema: Joi.object().keys({
-            feedPoster: Joi.string().required(),
-            eventVenue: Joi.string().required(),
-            eventName: Joi.string().required(),
-            eventDescription: Joi.string().required(),
+            feedPoster: Joi.string(),
+            eventVenue: Joi.string(),
+            eventName: Joi.string(),
+            eventDescription: Joi.string(),
             eventId: Joi.number(),
             eventImageUrl: Joi.string(),
             coordinators: Joi.array(),
             postLinks: Joi.array(),
-            eventDate: Joi.number().required()
+            eventDate: Joi.number()
         })
     }
 }
