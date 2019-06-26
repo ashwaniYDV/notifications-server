@@ -24,8 +24,10 @@ module.exports={
         messSchema: Joi.object().keys({
             studentMongoId: Joi.string(),
             messChoice: Joi.number(),
+            currentMeal: Joi.string(),
+            takenMeals: Joi.array(),
+            cancelledMeals: Joi.array(),
             timestamp: Joi.number(),
-            meals: Joi.array()
         })
     }
 }

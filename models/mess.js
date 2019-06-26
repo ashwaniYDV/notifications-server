@@ -10,14 +10,21 @@ const messSchema = new Schema({
         type:Number, 
         required: true
     },
+    currentMeal: {
+        type: String
+    },
+    takenMeals : {
+        type : Array,
+        "default" : []
+    },
+    cancelledMeals : {
+        type : Array,
+        "default" : []
+    },
     timestamp: {
         type:Number,
         default: new Date().getTime()
     },
-    meals : { 
-        type : Array ,
-        "default" : []
-    }
 });
 
 

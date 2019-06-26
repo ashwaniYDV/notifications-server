@@ -10,11 +10,15 @@ router.route('/')
     .get(MessControllers.getAllMess)
     .post(validateBody(schemas.messSchema), MessControllers.postMess)
 
-//localhost:3000/mess/:messId
+//localhost:3000/mess/:studentMongoId
 router.route('/:studentMongoId')
     .get(MessControllers.getMessWithStudentMongoId)
     .delete(MessControllers.deleteMessWithStudentMongoId)
     .patch(validateBody(schemas.messSchema), MessControllers.patchMessWithStudentMongoId)
+
+//localhost:3000/mess/cancel/:studentMongoId   
+router.route('/cancel/:studentMongoId')
+    .patch(validateBody(schemas.messSchema), MessControllers.cancelMeal)
 
 
 module.exports=router;
