@@ -5,6 +5,7 @@ module.exports={
     validateBody: (schema)=>{
         return (req,res,next)=>{
             
+            req.body.timestamp=new Date().getTime();
             const result=Joi.validate(req.body,schema);
             if(result.error){
                 return res.status(400).json(result.error)
@@ -20,16 +21,13 @@ module.exports={
 
     //valiadtion schemas
     schemas: {
-        lostnfoundSchema: Joi.object().keys({
-            lostnfoundPoster: Joi.string(),
-            lostStatus: Joi.number(),
-            name: Joi.string(),
-            place: Joi.string(),
-            time: Joi.string(),
-            date: Joi.string(),
-            description: Joi.string(),
-            contact: Joi.string(),
-            address: Joi.string()
+        messSchema: Joi.object().keys({
+            studentMongoId: Joi.string(),
+            messChoice: Joi.number(),
+            currentMeal: Joi.string(),
+            takenMeals: Joi.array(),
+            cancelledMeals: Joi.array(),
+            timestamp: Joi.number(),
         })
     }
 }

@@ -9,6 +9,7 @@ const users=require('./routes/users');
 const feeds=require('./routes/feeds');
 const lostnfounds=require('./routes/lostnfounds');
 const clubs=require('./routes/clubs');
+const mess=require('./routes/mess');
 
 const app=express();
 
@@ -37,6 +38,7 @@ app.use('/users',users);
 app.use('/feeds',feeds);
 app.use('/lostnfounds',lostnfounds);
 app.use('/clubs',clubs);
+app.use('/mess',mess);
 
 //Catch 404 errors and forward them to error handelers
 app.use((req,res,next)=>{
