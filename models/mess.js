@@ -6,6 +6,11 @@ const messSchema = new Schema({
         type: String, //user._id
         required: true
     },
+    student: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
     messChoice: {
         type:Number, 
         required: true
