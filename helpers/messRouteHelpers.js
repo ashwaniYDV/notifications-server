@@ -28,6 +28,6 @@ module.exports={
             takenMeals: Joi.array(),
             cancelledMeals: Joi.array(),
             timestamp: Joi.number(),
-        })
+        }).unknown(true)
     }
 }

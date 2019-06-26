@@ -20,5 +20,13 @@ router.route('/:studentMongoId')
 router.route('/cancel/:studentMongoId')
     .patch(validateBody(schemas.messSchema), MessControllers.cancelMeal)
 
+//localhost:3000/mess/manager/:studentMongoId   
+router.route('/manager/:studentMongoId')
+    .patch(validateBody(schemas.messSchema), MessControllers.manageMeal)
+
+//localhost:3000/mess/get/:messName
+router.route('/get/:messName')
+    .get(MessControllers.getAllDataOfMess)
+
 
 module.exports=router;
