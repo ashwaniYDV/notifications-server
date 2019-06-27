@@ -9,24 +9,24 @@ const passportConf=require('../passport');
 
 //localhost:3000/feeds/
 router.route('/')
-    .get(passport.authenticate('jwt',{session: false}), FeedsControllers.getAllFeeds)
+    .get(FeedsControllers.getAllFeeds)
     .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.feedSchema), FeedsControllers.postFeed)
 
 //localhost:3000/feeds/:feedId
 router.route('/:feedId')
-    .get(passport.authenticate('jwt',{session: false}), FeedsControllers.getFeedWithFeedId)
+    .get(FeedsControllers.getFeedWithFeedId)
     .delete(passport.authenticate('jwt',{session: false}), FeedsControllers.deleteFeedWithFeedId)
     .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.feedSchema), FeedsControllers.patchFeedWithFeedId)
 
 //localhost:3000/feeds/timestamp/:timestamp
 //get all feeds whose evenDate is greater than query timestamp
 router.route('/timestamp/:timestamp')
-    .get(passport.authenticate('jwt',{session: false}), FeedsControllers.getAllFeedsWithTimestamp)
+    .get(FeedsControllers.getAllFeedsWithTimestamp)
 
 //localhost:3000/feeds/latestFeed/:timestamp
 //get all feeds whose evenId is greater than current timestamp
 router.route('/latestFeed/:timestamp')
-    .get(passport.authenticate('jwt',{session: false}), FeedsControllers.getLatestFeedsWithCurrentTimestamp)
+    .get(FeedsControllers.getLatestFeedsWithCurrentTimestamp)
 
 
 module.exports=router;
