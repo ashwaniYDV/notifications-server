@@ -3,8 +3,13 @@ const Schema = mongoose.Schema;
 
 const feedSchema = new Schema({
     feedPoster: {
-        type: String, //instituteId
+        type: Schema.Types.ObjectId,
+        ref: 'user',
         required: true
+    },
+    relatedClub: {
+        type: Schema.Types.ObjectId,
+        ref: 'club'
     },
     eventVenue: {
         type: String,

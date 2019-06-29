@@ -22,7 +22,6 @@ module.exports={
     //valiadtion schemas
     schemas: {
         feedSchema: Joi.object().keys({
-            feedPoster: Joi.string(),
             eventVenue: Joi.string(),
             eventName: Joi.string(),
             eventDescription: Joi.string(),
@@ -31,6 +30,6 @@ module.exports={
             coordinators: Joi.array(),
             postLinks: Joi.array(),
             eventDate: Joi.number()
-        })
+        }).unknown(true)
     }
 }
