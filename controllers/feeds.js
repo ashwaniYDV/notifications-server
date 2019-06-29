@@ -65,7 +65,7 @@ module.exports={
     //delete feed using feedId if instituteId of auth user=feedPoster   api (access: feedPoster, superUser)
     deleteFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
-        userId=req.user._id;
+        userId=req.user.id;
 
 
         const feed=await Feed.findOne({_id: feedId})
@@ -97,7 +97,7 @@ module.exports={
     //update(patch) feed with feedId api (access: feedPoster, superUer)
     patchFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
-        const userId=req.user._id;
+        const userId=req.user.id;
 
         const feed=await Feed.findOne({_id: feedId})
         if(feed){

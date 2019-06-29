@@ -103,7 +103,7 @@ module.exports={
         const userId = req.params.userId;
 
         // if (userId==req.user._id || req.user.isSuperUser) {
-        if (userId==req.user._id && !req.user.isSuperUser) {
+        if (userId==req.user.id && !req.user.isSuperUser) {
             if(req.value.body.password!=undefined) {
                 const pwd=req.value.body.password;
                 const salt = await bcrypt.genSalt(10);
@@ -133,7 +133,7 @@ module.exports={
                     message: "User not found"
                 })
             }
-        } else if(userId!=req.user._id && req.user.isSuperUser) {
+        } else if(userId!=req.user.id && req.user.isSuperUser) {
             var updateData={};
             if(req.value.body.por!=undefined) {
                 updateData.por=req.value.body.por;
@@ -154,7 +154,7 @@ module.exports={
                     message: "User not found"
                 })
             }
-        } else if(userId==req.user._id && req.user.isSuperUser) {
+        } else if(userId==req.user.id && req.user.isSuperUser) {
             const user=await User.findOne({_id: userId});
             if(user){
                 User.findByIdAndUpdate({_id: userId}, req.value.body, {new:true}).then((updatedUser)=>{

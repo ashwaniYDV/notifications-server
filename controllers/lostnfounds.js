@@ -35,11 +35,11 @@ module.exports={
     //delete a lostnfound with lostnfoundId api (access: lostnfoundPoster, superUer)
     deleteLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
-        instituteId=req.user.instituteId;
+        const userId=req.user.id;
 
         const lostnfound=await Lostnfound.findOne({_id: lostnfoundId})
         if(lostnfound){
-            if(lostnfound.lostnfoundPoster==instituteId || req.user.isSuperUser==true) {
+            if(lostnfound.lostnfoundPoster==userId || req.user.isSuperUser==true) {
                 await Lostnfound.findByIdAndRemove({_id: lostnfoundId});
                 res.status(200).json({
                     message: "Lostnfound deleted"
@@ -80,11 +80,11 @@ module.exports={
     //update(patch) lostnfound with lostnfoundId api (access: lostnfoundPoster, superUer)
     patchLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
-        const instituteId=req.user.instituteId;
+        const userId=req.user.id;
 
         const lostnfound=await Lostnfound.findOne({_id: lostnfoundId})
         if(lostnfound){
-            if(lostnfound.lostnfoundPoster==instituteId || req.user.isSuperUser==true) {
+            if(lostnfound.lostnfoundPoster==userId || req.user.isSuperUser==true) {
                 Lostnfound.findByIdAndUpdate({_id: lostnfoundId},req.value.body,{new:true}).then((updatedLostnfound)=>{
                     res.status(200).json({
                         updatedLostnfound: updatedLostnfound
@@ -92,10 +92,27 @@ module.exports={
                 });
             } else {
                 res.status(401).json({
-                    message: "Unauthorized delete request" 
+                    message: "Unauthorized patch request" 
                 });
             }
             
+        } else {
+            res.status(404).json({
+                message: "No lostnfound found"
+            })
+        }
+        
+    },
+
+    //get lostnfound with lostnfoundId api (access: auth users)
+    getUserLostnfounds: async(req,res,next)=>{
+        const userId=req.params.userId;
+
+        const lostnfounds=await Lostnfound.find({lostnfoundPoster: userId})
+        if(lostnfounds){
+            res.status(200).json({
+                lostnfounds: lostnfounds
+            })
         } else {
             res.status(404).json({
                 message: "No lostnfound found"

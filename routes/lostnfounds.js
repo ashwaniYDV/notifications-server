@@ -19,5 +19,10 @@ router.route('/:lostnfoundId')
     .delete(passport.authenticate('jwt',{session: false}), LostnfoundsControllers.deleteLostnfound)
     .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.lostnfoundSchema), LostnfoundsControllers.patchLostnfound)
 
+//localhost:3000/lostnfounds/user/:userId (to get lostnfounds posted by logged-in user)
+router.route('/user/:userId')
+    .get(passport.authenticate('jwt',{session: false}), LostnfoundsControllers.getUserLostnfounds)
+
+
 
 module.exports=router;

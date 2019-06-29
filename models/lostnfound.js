@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const lostnfoundSchema = new Schema({
     lostnfoundPoster: {
-        type: String, //instituteId
+        type: Schema.Types.ObjectId,
+        ref: 'user',
         required: true
     },
     lostStatus: {
