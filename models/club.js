@@ -12,19 +12,19 @@ const clubSchema = new Schema({
     description: {
         type: String
     },
+    events: [{
+        type: Schema.Types.ObjectId,
+        ref: 'feed'
+    }],
     followers: {
         type: Number,
         default: 0
     },
     coordinators: {
-        type : Array , 
+        type : Array ,
         default : []
     },
     subCoordinators: {
-        type : Array , 
-        default : []
-    },
-    events: {
         type : Array , 
         default : []
     },
