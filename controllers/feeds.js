@@ -14,7 +14,6 @@ module.exports={
                 message: "No feeds found"
             })
         }
-        
     },
 
 
@@ -35,7 +34,7 @@ module.exports={
     getFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
 
-        const feed=await Feed.findOne({_id: feedId})
+        const feed=await Feed.findOne({_id: feedId}).populate('feedPoster','name instituteId').populate('relatedClub','name bio');
         if(feed){
             res.status(200).json({
                 feed: feed
