@@ -4,7 +4,7 @@ module.exports={
 
     //get all lostnfounds api (access: auth users)
     getAllLostnfounds: async(req,res,next)=>{
-        const lostnfounds=await Lostnfound.find({}).sort({_id:-1});
+        const lostnfounds=await Lostnfound.find({}).populate('lostnfoundPoster', 'name instituteId').sort({_id:-1});
         if(lostnfounds){
             res.status(200).json({
                 lostnfounds: lostnfounds
@@ -63,7 +63,7 @@ module.exports={
     getLostnfound: async(req,res,next)=>{
         const lostnfoundId=req.params.lostnfoundId;
 
-        const lostnfound=await Lostnfound.findOne({_id: lostnfoundId})
+        const lostnfound=await Lostnfound.findOne({_id: lostnfoundId}).populate('lostnfoundPoster', 'name instituteId')
         if(lostnfound){
             res.status(200).json({
                 lostnfound: lostnfound
@@ -106,9 +106,8 @@ module.exports={
 
     //get lostnfound with lostnfoundId api (access: auth users)
     getUserLostnfounds: async(req,res,next)=>{
-        const userId=req.params.userId;
 
-        const lostnfounds=await Lostnfound.find({lostnfoundPoster: userId}).sort({_id:-1});
+        const lostnfounds=await Lostnfound.find({lostnfoundPoster: req.user.id}).sort({_id:-1});
         if(lostnfounds){
             res.status(200).json({
                 lostnfounds: lostnfounds
