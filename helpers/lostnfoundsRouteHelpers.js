@@ -21,7 +21,6 @@ module.exports={
     //valiadtion schemas
     schemas: {
         lostnfoundSchema: Joi.object().keys({
-            lostnfoundPoster: Joi.string(),
             lostStatus: Joi.number(),
             name: Joi.string(),
             place: Joi.string(),
@@ -30,6 +29,6 @@ module.exports={
             description: Joi.string(),
             contact: Joi.string(),
             address: Joi.string()
-        })
+        }).unknown(true)
     }
 }
