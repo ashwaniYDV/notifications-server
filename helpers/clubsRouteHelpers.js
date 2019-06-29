@@ -27,10 +27,9 @@ module.exports={
             followers: Joi.number(),
             coordinators: Joi.array(),
             subCoordinators: Joi.array(),
-            events: Joi.array(),
             pages: Joi.array(),
             website: Joi.string(),
             image: Joi.string()
-        })
+        }).unknown(true)
     }
 }

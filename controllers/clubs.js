@@ -36,7 +36,7 @@ module.exports={
     getClubWithClubId: async(req,res,next)=>{
         const clubId=req.params.clubId;
 
-        const club=await Club.findOne({_id: clubId})
+        const club=await Club.findOne({_id: clubId}).populate('events');
         if(club){
             res.status(200).json({
                 club: club
