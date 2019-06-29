@@ -5,7 +5,7 @@ module.exports={
 
     //get all feeds api (access: auth users)
     getAllFeeds: async(req,res,next)=>{
-        const feeds=await Feed.find({}).populate('relatedClub','name bio');
+        const feeds=await Feed.find({}).populate('relatedClub','name bio').sort({_id:-1});
         if(feeds){
             res.status(200).json({
                 feeds: feeds
