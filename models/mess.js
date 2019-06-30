@@ -12,7 +12,7 @@ const messSchema = new Schema({
         required: true
     },
     messChoice: {
-        type:Number, 
+        type:Number,
         required: true
     },
     currentMeal: {
