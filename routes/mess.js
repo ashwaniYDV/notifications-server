@@ -24,9 +24,15 @@ router.route('/cancel/:studentMongoId')
 router.route('/manager/:studentMongoId')
     .patch(validateBody(schemas.messSchema), MessControllers.manageMeal)
 
-//localhost:3000/mess/get/:messName
+
+
+//localhost:3000/mess/get/:messName   (get all student data of particular mess)
 router.route('/get/:messName')
     .get(MessControllers.getAllDataOfMess)
+
+//localhost:3000/mess/cancelled/:messName    (get all cancelled meals data of particular mess)
+router.route('/cancelled/:messName')
+    .get(MessControllers.getAllCancelledDataOfMess)
 
 
 module.exports=router;

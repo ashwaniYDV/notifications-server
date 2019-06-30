@@ -140,7 +140,7 @@ module.exports={
                 oldData.push(currentMeal);
                 Mess.findByIdAndUpdate({_id: mess._id},{cancelledMeals: oldData},{new:true}).then((updatedMess)=>{
                     res.status(200).json({
-                        updatedMess: updatedMess
+                        "message": "Meal cancelled successfully."
                     });
                 });
             }
@@ -170,8 +170,17 @@ module.exports={
                 let result=data.split('_');
                 if(dd==parseInt(result[0]) && mm==parseInt(result[1]) && yyyy==parseInt(result[2]) && mealno==parseInt(result[3])){
                     errorCount++;
-                    return res.status(200).json({
+                    return res.status(401).json({
                         "message": "Meal is cancelled"
+                    });
+                }
+            })
+
+            mess.takenMeals.forEach((data)=>{
+                if(currentMeal===data){
+                    errorCount++;
+                    return res.status(403).json({
+                        "message": "Meal is already taken"
                     });
                 }
             })
@@ -182,7 +191,7 @@ module.exports={
                 oldData.push(newMeal);
                 Mess.findByIdAndUpdate({_id: mess._id},{takenMeals: oldData},{new:true}).then((updatedMess)=>{
                     res.status(200).json({
-                        updatedMess: updatedMess
+                        "message": "Meal updated"
                     });
                 });
             }
@@ -196,7 +205,22 @@ module.exports={
     //getAllDataOfMess (access: )
     getAllDataOfMess: async(req,res,next)=>{
         const messName=req.params.messName;
-        let mess=await Mess.find({messChoice: messName},{studentMongoId: 1, student: 2, cancelledMeals: 6}).populate('student','name instituteId');
+        let mess=await Mess.find({messChoice: messName},{studentMongoId: 1, student: 2, messChoice: 3}).populate('student','name instituteId');
+        if(mess.length){
+            res.status(200).json({
+                mess: mess
+            })
+        } else {
+            res.status(404).json({
+                message: "No mess data found"
+            })
+        }
+    },
+
+    //getAllCancelledDataOfMess (access: )
+    getAllCancelledDataOfMess: async(req,res,next)=>{
+        const messName=req.params.messName;
+        let mess=await Mess.find({messChoice: messName},{student: 2, cancelledMeals: 6}).populate('student','name instituteId');
         if(mess.length){
             res.status(200).json({
                 mess: mess
