@@ -101,11 +101,10 @@ module.exports={
             let date=new Date().getDate();
             let month=new Date().getMonth()+1;
             let year=new Date().getFullYear();
-            let hours=new Date().getHours()+1;
 
             let errorCount=0;
 
-            if((dd<date && mm<=month && yyyy<=year)) {
+            if((dd<date && mm<=month && yyyy<=year) || (mm<month && yyyy<=year) || (yyyy<year) ) {
                 errorCount++;
                 return res.status(404).json({message: "This meal does not exist!"});
             }
