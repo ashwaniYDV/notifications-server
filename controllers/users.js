@@ -54,7 +54,7 @@ module.exports={
 
         let code = Math.floor(100000 + Math.random() * 900000);
         req.value.body.code=code;
-        let mailresponse = await sendMail('1801ee13@iitp.ac.in', code);
+        let mailresponse = await sendMail(email, code);
         if(mailresponse === true) {
             console.log('yeessss');
 
