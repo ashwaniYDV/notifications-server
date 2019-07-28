@@ -38,7 +38,7 @@ const feedSchema = new Schema({
         type : Array , 
         "default" : []
     },
-    postLinks : { 
+    postLinks : {
         type : Array , 
         "default" : []
     }
