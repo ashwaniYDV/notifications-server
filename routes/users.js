@@ -28,6 +28,10 @@ router.route('/:userId')
     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUser)
     .patch(passport.authenticate('jwt',{session: false}), validateBodySignUp(schemas.userSchemaPatch), UsersControllers.patchUser)
 
+//localhost:3000/users/activate
+router.route('/activate')
+    .post(UsersControllers.activateUser)
+
 
 router.route('/instituteId/:instituteId')
     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUserByInstituteId)

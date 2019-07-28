@@ -46,6 +46,13 @@ const userSchema = new Schema({
   registerDate: {
     type: Date,
     default: Date.now
+  },
+  code: {
+    type: Number
+  },
+  active: {
+    type: Number,
+    default: 0
   }
 });
 
