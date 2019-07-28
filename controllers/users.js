@@ -2,6 +2,7 @@ const JWT=require('jsonwebtoken');
 const User=require('../models/user');
 const {JWT_SECRET}=require('../configs/config');
 const bcrypt = require("bcryptjs");
+const nodemailer = require('nodemailer');
 
 signToken=(user)=>{
     return JWT.sign({
@@ -10,6 +11,28 @@ signToken=(user)=>{
         iat: new Date().getTime(), //current time
         exp: new Date().setDate(new Date().getDate()+30) //current time +30 day ahead
     },JWT_SECRET)
+}
+
+sendMail = async (email, code) => {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'ashyadavash@gmail.com',
+            pass: '9451937619'
+        }
+    });
+    let mailOptions = {
+        from: 'ashyadavash@gmail.com', // TODO: email sender
+        to: email, // TODO: email receiver
+        subject: 'IITP-App, Activate your account',
+        text: `Your activation OTP is ${code}`
+    };
+    try {
+        await transporter.sendMail(mailOptions);
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
 
 module.exports={
@@ -29,16 +52,27 @@ module.exports={
         //initially setting por to empty array (this can be set by admin only)
         req.value.body.por=[];
 
-        //create a new user
-        const newUser=new User(req.value.body); 
-        await newUser.save();
+        let code = Math.floor(100000 + Math.random() * 900000);
+        req.value.body.code=code;
+        let mailresponse = await sendMail('1801ee13@iitp.ac.in', code);
+        if(mailresponse === true) {
+            console.log('yeessss');
 
-        const token=signToken(newUser);
+            //create a new user
+            const newUser=new User(req.value.body);
+            await newUser.save();
+            const token=signToken(newUser);
+            res.status(200).json({
+                token: token,
+                user: newUser
+            })
+        } else {
+            console.log('nooo');
+            res.status(500).json({
+                message: "Could not register your account"
+            })
+        }
 
-        res.status(200).json({
-            token: token,
-            user: newUser
-        })
     },
 
     //signin api (access: all)
@@ -46,10 +80,39 @@ module.exports={
         //generate token
         const user=req.user;
         const token=signToken(user);
+
         res.status(200).json({
             token: token,
             user: user
         });
+    },
+
+    activateUser: async(req,res,next)=>{
+        const { email, code } = req.body;
+        const user = await User.findOne({email: email});
+        if (user) {
+            if (user.active === 1) {
+                res.status(403).json({
+                    "message": "User already activated"
+                 });
+            } else {
+                if (user.code === code) {
+                    User.findByIdAndUpdate({_id: user._id},{active: 1, code: 0},{new:true}).then((updatedUser)=>{
+                        res.status(200).json({
+                            user: updatedUser
+                        });
+                    });
+                } else {
+                    res.status(403).json({
+                        "message": "Invalid activation code"
+                     });
+                }
+            }
+        } else {
+            res.status(404).json({
+                "message": "User not registered"
+             });
+        }
     },
 
     //secret resource api (access: superUser)
@@ -93,7 +156,7 @@ module.exports={
             })
         } else {
             res.status(404).json({
-                message: "User not found"
+                message: "User not found"   
             })
         }
     },

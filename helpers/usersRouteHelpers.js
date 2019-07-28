@@ -69,7 +69,9 @@ module.exports={
             instituteId: Joi.string().required(),
             batch: Joi.string(),
             branch: Joi.string(),
-            rollno: Joi.string()
+            rollno: Joi.string(),
+            code: Joi.number(),
+            active: Joi.number()
         }),
         userSchemaPatch: Joi.object().keys({
             email: Joi.string().email(),
@@ -80,7 +82,9 @@ module.exports={
             instituteId: Joi.string(),
             batch: Joi.string(),
             branch: Joi.string(),
-            rollno: Joi.string()
+            rollno: Joi.string(),
+            code: Joi.number(),
+            active: Joi.number()
         }),
     }
 }
