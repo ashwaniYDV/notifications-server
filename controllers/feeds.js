@@ -145,7 +145,7 @@ module.exports={
         const timestamp=req.params.timestamp;
         const query=parseInt(timestamp);
 
-        const latestFeeds=await Feed.find({eventId: {$gt: query} })
+        const latestFeeds=await Feed.find({eventId: {$gt: query} }).populate('feedPoster','name instituteId')
         if(latestFeeds){
             res.status(200).json({
                 latestFeeds: latestFeeds
