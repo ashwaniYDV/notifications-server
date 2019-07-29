@@ -39,6 +39,10 @@ const userSchema = new Schema({
     required: true,
     lowercase: true
   },
+  phone: {
+    type: String,
+    required: true
+  },
   rollno: {
     type: String,
     required: true

@@ -69,6 +69,7 @@ module.exports={
             instituteId: Joi.string().required(),
             batch: Joi.string(),
             branch: Joi.string(),
+            phone:Joi.string(),
             rollno: Joi.string(),
             code: Joi.number(),
             active: Joi.number()
@@ -82,6 +83,7 @@ module.exports={
             instituteId: Joi.string(),
             batch: Joi.string(),
             branch: Joi.string(),
+            phone:Joi.string(),
             rollno: Joi.string(),
             code: Joi.number(),
             active: Joi.number()
