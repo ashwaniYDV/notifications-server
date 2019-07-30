@@ -128,8 +128,16 @@ module.exports={
 
         const feeds=await Feed.find({eventDate: {$gt: query} })
         if(feeds){
+
+            let validFeeds;
+            feeds.forEach(f => {
+                if (!(f.feedPoster === null && f.feedPoster === undefined)){
+                    validFeeds.push(f);
+                }
+            });
+
             res.status(200).json({
-                feeds: feeds
+                feeds: validFeeds
             })
         } else {
             res.status(404).json({

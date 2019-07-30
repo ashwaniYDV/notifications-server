@@ -98,7 +98,9 @@ module.exports={
             } else {
                 if (user.code === code) {
                     User.findByIdAndUpdate({_id: user._id},{active: 1, code: 0},{new:true}).then((updatedUser)=>{
+                        const token=signToken(updatedUser);
                         res.status(200).json({
+                            token: token,
                             user: updatedUser
                         });
                     });
