@@ -33,6 +33,9 @@ const lostnfoundSchema = new Schema({
     },
     address: {
         type: String
+    },
+    image: {
+        type: String
     }
 });
 

@@ -28,7 +28,8 @@ module.exports={
             date: Joi.string(),
             description: Joi.string(),
             contact: Joi.string(),
-            address: Joi.string()
+            address: Joi.string(),
+            image: Joi.string()
         }).unknown(true)
     }
 }
