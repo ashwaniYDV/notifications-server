@@ -15,13 +15,13 @@ router.route('/signUp')
 router.route('/signIn')
     .post(validateBodySignIn(schemas.authSchemaSignIn), passport.authenticate('local',{session: false}), UsersControllers.signIn)
 
-//localhost:3000/users/secret
-router.route('/secret')
-    .get(passport.authenticate('jwt',{session: false}),UsersControllers.secret)
+// //localhost:3000/users/secret
+// router.route('/secret')
+//     .get(passport.authenticate('jwt',{session: false}),UsersControllers.secret)
 
-//localhost:3000/users/
-router.route('/')
-    .get(passport.authenticate('jwt',{session: false}),UsersControllers.getAllUsers)
+// //localhost:3000/users/
+// router.route('/')
+//     .get(passport.authenticate('jwt',{session: false}),UsersControllers.getAllUsers)
 
 //localhost:3000/users/:id
 router.route('/:userId')
@@ -33,17 +33,17 @@ router.route('/activate')
     .post(UsersControllers.activateUser)
 
 
-router.route('/instituteId/:instituteId')
-    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUserByInstituteId)
+// router.route('/instituteId/:instituteId')
+//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUserByInstituteId)
 
-router.route('/batch/:batch')
-    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatch)
+// router.route('/batch/:batch')
+//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatch)
 
-router.route('/branch/:branch')
-    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBranch)
+// router.route('/branch/:branch')
+//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBranch)
 
-router.route('/batchAndBranch/:batch/:branch')
-    .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatchAndBranch)
+// router.route('/batchAndBranch/:batch/:branch')
+//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatchAndBranch)
 
 
 module.exports=router;

@@ -132,19 +132,19 @@ module.exports={
     //     }
     // },
 
-    //get all user api (access: auth users)
-    getAllUsers: async(req,res,next)=>{
-        const users=await User.find({})
-        if(users){
-            res.status(200).json({
-                users: users
-            })
-        } else {
-            res.status(404).json({
-                message: "No users found"
-            })
-        }
-    },
+    // //get all user api (access: auth users)
+    // getAllUsers: async(req,res,next)=>{
+    //     const users=await User.find({})
+    //     if(users){
+    //         res.status(200).json({
+    //             users: users
+    //         })
+    //     } else {
+    //         res.status(404).json({
+    //             message: "No users found"
+    //         })
+    //     }
+    // },
 
     
     //get particular user api (access: auth users)
