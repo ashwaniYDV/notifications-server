@@ -53,7 +53,6 @@ module.exports={
         }
     },
     
-
     //valiadtion schemas
     schemas: {
         authSchemaSignIn: Joi.object().keys({

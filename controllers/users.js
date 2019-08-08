@@ -117,21 +117,6 @@ module.exports={
         }
     },
 
-    // //secret resource api (access: superUser)
-    // secret: async(req,res,next)=>{
-    //     const user=req.user;
-    //     if (user.isSuperUser) {
-    //         res.status(200).json({
-    //             secret: "Secret Resource",
-    //             user: user
-    //          });
-    //     } else {
-    //         res.status(401).json({ 
-    //             message: "Not super user"
-    //          });
-    //     }
-    // },
-
     // //get all user api (access: auth users)
     // getAllUsers: async(req,res,next)=>{
     //     const users=await User.find({})

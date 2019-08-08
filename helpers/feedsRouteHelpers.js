@@ -18,7 +18,6 @@ module.exports={
         }
     },
     
-
     //valiadtion schemas
     schemas: {
         feedSchema: Joi.object().keys({

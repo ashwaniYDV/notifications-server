@@ -6,7 +6,6 @@ const {validateBody,validateBodySignUp,validateBodySignIn,schemas}=require('../h
 const passport=require('passport');
 const passportConf=require('../passport');
 
-
 //localhost:3000/users/signup
 router.route('/signUp')
     .post(validateBodySignUp(schemas.authSchemaSignUp),UsersControllers.signUp)
@@ -14,10 +13,6 @@ router.route('/signUp')
 //localhost:3000/users/signin    
 router.route('/signIn')
     .post(validateBodySignIn(schemas.authSchemaSignIn), passport.authenticate('local',{session: false}), UsersControllers.signIn)
-
-// //localhost:3000/users/secret
-// router.route('/secret')
-//     .get(passport.authenticate('jwt',{session: false}),UsersControllers.secret)
 
 // //localhost:3000/users/
 // router.route('/')
@@ -44,6 +39,5 @@ router.route('/activate')
 
 // router.route('/batchAndBranch/:batch/:branch')
 //     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatchAndBranch)
-
 
 module.exports=router;
