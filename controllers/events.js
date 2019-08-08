@@ -5,7 +5,7 @@ module.exports={
 
     //get all feeds api (access: auth users)
     getAllFeeds: async(req,res,next)=>{
-        const feeds=await Feed.find({}).populate('feedPoster','name instituteId').sort({_id:-1});
+        const feeds=await Feed.find({}).populate('relatedClub','name bio').sort({_id:-1}).populate('feedPoster','name instituteId');
         if(feeds){
             res.status(200).json({
                 feeds: feeds
@@ -19,18 +19,35 @@ module.exports={
 
     //post a feed api (access: auth users)
     postFeed: async(req,res,next)=>{
-        const feed=new Feed(req.value.body);
-        await feed.save();
-        res.status(200).json({
-            feed: feed
-        })
+        if(req.value.body.relatedClub) {
+            const club=await Club.findById(req.value.body.relatedClub);
+            const newFeed=req.value.body;
+
+            const feed=new Feed(newFeed);
+            await feed.save();
+
+            club.events.push(feed);
+            await club.save();
+
+            res.status(200).json({
+                feed: feed
+            })
+        } else {
+            //create a new feed
+            const feed=new Feed(req.value.body);
+            await feed.save();
+            //response
+            res.status(200).json({
+                feed: feed
+            })
+        }
     },
 
     //get feed with feedId api (access: auth users)
     getFeedWithFeedId: async(req,res,next)=>{
         const feedId=req.params.feedId;
 
-        const feed=await Feed.findOne({_id: feedId}).populate('feedPoster','name instituteId');
+        const feed=await Feed.findOne({_id: feedId}).populate('feedPoster','name instituteId').populate('relatedClub','name bio');
         if(feed){
             res.status(200).json({
                 feed: feed
@@ -51,6 +68,11 @@ module.exports={
         const feed=await Feed.findOne({_id: feedId})
         if(feed){
             if(feed.feedPoster==userId || req.user.isSuperUser==true) {
+                if(feed.relatedClub) {
+                    const club=await Club.findById(feed.relatedClub);
+                    club.events.pull(feedId);
+                    club.save();
+                }
                 await Feed.findByIdAndRemove({_id: feedId});
                 res.status(200).json({
                     message: "Feed deleted" 
@@ -122,6 +144,7 @@ module.exports={
         
     },
     
+    
     //get all feeds whose evenId is greater than current timestamp api (access: auth users)
     getLatestFeedsWithCurrentTimestamp: async(req,res,next)=>{
         const timestamp=req.params.timestamp;
@@ -140,4 +163,5 @@ module.exports={
         
     },
     
+
 }

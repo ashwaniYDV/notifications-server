@@ -7,6 +7,10 @@ const feedSchema = new Schema({
         ref: 'user',
         required: true
     },
+    relatedClub: {
+        type: Schema.Types.ObjectId,
+        ref: 'club'
+    },
     eventVenue: {
         type: String,
         required: true
