@@ -17,7 +17,6 @@ module.exports={
         
     },
 
-
     //post a club api (access: auth users)
     postClub: async(req,res,next)=>{
 
@@ -30,7 +29,6 @@ module.exports={
         })
         
     },
-
 
     //get club with clubId api (access: auth users)
     getClubWithClubId: async(req,res,next)=>{
@@ -48,7 +46,6 @@ module.exports={
         }
         
     },
-
 
     //delete club using clubId api (access: superUser)
     deleteClubWithClubId: async(req,res,next)=>{
