@@ -8,6 +8,7 @@ const {mongoURI}=require('./configs/config');
 const users=require('./routes/users');
 const feeds=require('./routes/feeds');
 const lostnfounds=require('./routes/lostnfounds');
+const maintenances=require('./routes/maintenances');
 const clubs=require('./routes/clubs');
 const mess=require('./routes/mess');
 
@@ -37,6 +38,7 @@ app.use(bodyParser.json());
 app.use('/users',users);
 app.use('/feeds',feeds);
 app.use('/lostnfounds',lostnfounds);
+app.use('/maintenances',maintenances);
 app.use('/clubs',clubs);
 app.use('/mess',mess);
 

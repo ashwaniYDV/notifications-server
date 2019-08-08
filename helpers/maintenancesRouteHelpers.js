@@ -1,11 +1,9 @@
 const Joi=require('joi');
 
 module.exports={
-
     validateBody: (schema)=>{
         return (req,res,next)=>{
             
-            req.body.timestamp=new Date().getTime();
             const result=Joi.validate(req.body,schema);
             if(result.error){
                 return res.status(400).json(result.error)
@@ -17,16 +15,13 @@ module.exports={
             next();
         }
     },
-    
     //valiadtion schemas
     schemas: {
-        messSchema: Joi.object().keys({
-            studentMongoId: Joi.string(),
-            messChoice: Joi.number(),
-            currentMeal: Joi.string(),
-            takenMeals: Joi.array(),
-            cancelledMeals: Joi.array(),
-            timestamp: Joi.number(),
+        maintenanceSchema: Joi.object().keys({
+            category: Joi.number().required(),
+            status: Joi.string(),
+            problem: Joi.string(),
+            imageUrl: Joi.string()
         }).unknown(true)
     }
 }

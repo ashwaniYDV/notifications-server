@@ -4,7 +4,6 @@ const {validateBody, schemas}=require('../helpers/messRouteHelpers');
 const passport=require('passport');
 const passportConf=require('../passport');
 
-
 //localhost:3000/mess/
 router.route('/')
     .get(MessControllers.getAllMess)
@@ -33,6 +32,5 @@ router.route('/get/:messName')
 //localhost:3000/mess/cancelled/:messName    (get all cancelled meals data of particular mess)
 router.route('/cancelled/:messName')
     .get(MessControllers.getAllCancelledDataOfMess)
-
 
 module.exports=router;

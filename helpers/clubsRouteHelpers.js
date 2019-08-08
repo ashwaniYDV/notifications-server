@@ -17,7 +17,6 @@ module.exports={
         }
     },
     
-
     //valiadtion schemas
     schemas: {
         clubSchema: Joi.object().keys({
