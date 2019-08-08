@@ -12,10 +12,10 @@ const clubSchema = new Schema({
     description: {
         type: String
     },
-    // events: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'event'
-    // }],
+    events: [{
+        type: Schema.Types.ObjectId,
+        ref: 'event'
+    }],
     followers: {
         type: Number,
         default: 0
