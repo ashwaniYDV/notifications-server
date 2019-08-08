@@ -92,7 +92,7 @@ module.exports={
         const user = await User.findOne({email: email});
         if (user) {
             if (user.active === 1) {
-                res.status(403).json({
+                res.status(408).json({
                     "message": "User already activated"
                  });
             } else {
@@ -105,7 +105,7 @@ module.exports={
                         });
                     });
                 } else {
-                    res.status(403).json({
+                    res.status(409).json({
                         "message": "Invalid activation code"
                      });
                 }
@@ -117,20 +117,20 @@ module.exports={
         }
     },
 
-    //secret resource api (access: superUser)
-    secret: async(req,res,next)=>{
-        const user=req.user;
-        if (user.isSuperUser) {
-            res.status(200).json({
-                secret: "Secret Resource",
-                user: user
-             });
-        } else {
-            res.status(401).json({ 
-                message: "Not super user"
-             });
-        }
-    },
+    // //secret resource api (access: superUser)
+    // secret: async(req,res,next)=>{
+    //     const user=req.user;
+    //     if (user.isSuperUser) {
+    //         res.status(200).json({
+    //             secret: "Secret Resource",
+    //             user: user
+    //          });
+    //     } else {
+    //         res.status(401).json({ 
+    //             message: "Not super user"
+    //          });
+    //     }
+    // },
 
     //get all user api (access: auth users)
     getAllUsers: async(req,res,next)=>{
@@ -241,71 +241,71 @@ module.exports={
         
     },
 
-    //get user by instituteId api (access: auth users)
-    getUserByInstituteId: async(req,res,next)=>{
-        const instituteId = req.params.instituteId;
+    // //get user by instituteId api (access: auth users)
+    // getUserByInstituteId: async(req,res,next)=>{
+    //     const instituteId = req.params.instituteId;
 
-        const user=await User.findOne({instituteId: instituteId})
-        if(user){
-            res.status(200).json({
-                user: user
-            })
-        } else {
-            res.status(404).json({
-                message: "User not found"
-            })
-        }
-    },
+    //     const user=await User.findOne({instituteId: instituteId})
+    //     if(user){
+    //         res.status(200).json({
+    //             user: user
+    //         })
+    //     } else {
+    //         res.status(404).json({
+    //             message: "User not found"
+    //         })
+    //     }
+    // },
 
-    //get users by batch api (access: auth users)
-    getUsersByBatch: async(req,res,next)=>{
-        const batch = req.params.batch;
+    // //get users by batch api (access: auth users)
+    // getUsersByBatch: async(req,res,next)=>{
+    //     const batch = req.params.batch;
 
-        const users=await User.find({batch: batch})
-        if(users){
-            res.status(200).json({
-                users: users
-            })
-        } else {
-            res.status(404).json({
-                message: "Users not found"
-            })
-        }
-    },
+    //     const users=await User.find({batch: batch})
+    //     if(users){
+    //         res.status(200).json({
+    //             users: users
+    //         })
+    //     } else {
+    //         res.status(404).json({
+    //             message: "Users not found"
+    //         })
+    //     }
+    // },
 
-    //get users by branch api (access: auth users)
-    getUsersByBranch: async(req,res,next)=>{
-        const branch = req.params.branch;
+    // //get users by branch api (access: auth users)
+    // getUsersByBranch: async(req,res,next)=>{
+    //     const branch = req.params.branch;
 
-        const users=await User.find({branch: branch})
-        if(users){
-            res.status(200).json({
-                users: users
-            })
-        } else {
-            res.status(404).json({
-                message: "Users not found"
-            })
-        }
-    },
+    //     const users=await User.find({branch: branch})
+    //     if(users){
+    //         res.status(200).json({
+    //             users: users
+    //         })
+    //     } else {
+    //         res.status(404).json({
+    //             message: "Users not found"
+    //         })
+    //     }
+    // },
 
-    //get users by batch and branch api (access: auth users)
-    getUsersByBatchAndBranch: async(req,res,next)=>{
+    // //get users by batch and branch api (access: auth users)
+    // getUsersByBatchAndBranch: async(req,res,next)=>{
 
-        const batch = req.params.batch;
-        const branch = req.params.branch;
+    //     const batch = req.params.batch;
+    //     const branch = req.params.branch;
 
-        const users=await User.find({batch: batch, branch: branch})
-        if(users){
-            res.status(200).json({
-                users: users
-            })
-        } else {
-            res.status(404).json({
-                message: "Users not found"
-            })
-        }
-    },
+    //     const users=await User.find({batch: batch, branch: branch})
+    //     if(users){
+    //         res.status(200).json({
+    //             users: users
+    //         })
+    //     } else {
+    //         res.status(404).json({
+    //             message: "Users not found"
+    //         })
+    //     }
+    // },
     
 
 }
