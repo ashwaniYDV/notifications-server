@@ -7,6 +7,7 @@ const {mongoURI}=require('./configs/config');
 
 const users=require('./routes/users');
 const feeds=require('./routes/feeds');
+const events=require('./routes/events');
 const lostnfounds=require('./routes/lostnfounds');
 const maintenances=require('./routes/maintenances');
 const complaints=require('./routes/complaints');
@@ -38,6 +39,7 @@ app.use(bodyParser.json());
 //Routes
 app.use('/users',users);
 app.use('/feeds',feeds);
+app.use('/events',events);
 app.use('/lostnfounds',lostnfounds);
 app.use('/maintenances',maintenances);
 app.use('/complaints',complaints);
@@ -55,12 +57,10 @@ app.use((req,res,next)=>{
 app.use((err,req,res,next)=>{
     const error=err;
     const status=err.status||500;
-
     //respond to clients
     res.status(status).json({
         message: error.message
     });
-
     //respond to ourselves
     console.error(err); 
 })

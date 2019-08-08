@@ -1,32 +1,33 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const feedSchema = new Schema({
-    feedPoster: {
+const eventSchema = new Schema({
+    poster: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
     relatedClub: {
         type: Schema.Types.ObjectId,
-        ref: 'club'
+        ref: 'club',
+        required: true
     },
-    eventVenue: {
+    venue: {
         type: String,
         required: true
     },
-    eventName: {
+    name: {
         type: String,
         required: true
     },
-    eventDescription: {
+    description: {
         type: String,
         required: true
     },
-    eventImageUrl: {
+    imageUrl: {
         type: String
     },
-    eventDate: {
+    date: {
         type:Number, 
         required: true
     },
@@ -45,5 +46,5 @@ const feedSchema = new Schema({
 });
 
 
-const Feed = mongoose.model("feed", feedSchema);
-module.exports = Feed;
+const Event = mongoose.model("event", eventSchema);
+module.exports = Event;

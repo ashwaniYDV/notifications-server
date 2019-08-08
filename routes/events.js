@@ -1,28 +1,18 @@
 const router=require('express-promise-router')();
-const FeedsControllers=require('../controllers/feeds');
-const {validateBody, schemas}=require('../helpers/feedsRouteHelpers');
+const EventsControllers=require('../controllers/events');
+const {validateBody, schemas}=require('../helpers/eventsRouteHelpers');
 const passport=require('passport');
 const passportConf=require('../passport');
 
-//localhost:3000/feeds/
+//localhost:3000/events
 router.route('/')
-    .get(FeedsControllers.getAllFeeds)
-    .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.feedSchema), FeedsControllers.postFeed)
+    .get(EventsControllers.getAllEvents)
+    .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.eventSchema), EventsControllers.postEvent)
 
-//localhost:3000/feeds/:feedId
-router.route('/:feedId')
-    .get(FeedsControllers.getFeedWithFeedId)
-    .delete(passport.authenticate('jwt',{session: false}), FeedsControllers.deleteFeedWithFeedId)
-    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.feedSchema), FeedsControllers.patchFeedWithFeedId)
-
-//localhost:3000/feeds/timestamp/:timestamp
-//get all feeds whose evenDate is greater than query timestamp
-router.route('/timestamp/:timestamp')
-    .get(FeedsControllers.getAllFeedsWithTimestamp)
-
-//localhost:3000/feeds/latestFeed/:timestamp
-//get all feeds whose evenId is greater than current timestamp
-router.route('/latestFeed/:timestamp')
-    .get(FeedsControllers.getLatestFeedsWithCurrentTimestamp)
+//localhost:3000/events/:eventId
+router.route('/:eventId')
+    .get(EventsControllers.getEventWithEventId)
+    .delete(passport.authenticate('jwt',{session: false}), EventsControllers.deleteEventWithEventId)
+    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.eventSchema), EventsControllers.patchEventWithEventId)
 
 module.exports=router;
