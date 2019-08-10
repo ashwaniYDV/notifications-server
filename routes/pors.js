@@ -13,6 +13,10 @@ router.route('/')
 router.route('/club/:clubId')
     .get(passport.authenticate('jwt',{session: false}),PorsControllers.getClubPors)
 
+//localhost:3000/pors/user/:userId
+router.route('/user/:userId')
+    .get(passport.authenticate('jwt',{session: false}),PorsControllers.getUserPors)
+
 //localhost:3000/pors/:porId
 router.route('/:porId')
     .get(passport.authenticate('jwt',{session: false}),PorsControllers.getPorWithPorId)

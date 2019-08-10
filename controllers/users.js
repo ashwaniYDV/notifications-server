@@ -136,7 +136,7 @@ module.exports={
     getUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
-        const user=await User.findOne({_id: userId})
+        const user=await User.findOne({_id: userId}).populate('pors');
         if(user){
             res.status(200).json({
                 user: user

@@ -56,8 +56,9 @@ module.exports={
         await por.save();
         club.pors.push(por);
         await club.save();
-        user.pors.push(por);
-        await user.save();
+        let pors=user.pors;
+        pors.push(por);
+        await User.findByIdAndUpdate({_id: user._id},{pors});
         res.status(200).json({
             pors: por
         })
@@ -93,8 +94,9 @@ module.exports={
             club.pors.pull(porId);
             club.save();
             const user=await User.findById(por.user);
-            user.pors.pull(porId);
-            user.save();
+            let userPors=user.pors;
+            userPors.pull(porId);
+            await User.findByIdAndUpdate({_id: por.user},{pors: userPors});
             await Por.findByIdAndRemove({_id: porId});
             res.status(200).json({
                 message: "Por deleted"
