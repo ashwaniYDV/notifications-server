@@ -38,7 +38,7 @@ module.exports={
         const greaterThan = query - 60*24*60*60*1000;
         const lessThan = query + 60*24*60*60*1000;
 
-        const events=await Event.find({}).where('date').gt(greaterThan).lt(lessThan).populate('relatedClub','name bio').sort({_id:-1});
+        const events=await Event.find({date: {$gt: greaterThan, $lt: lessThan}}).populate('relatedClub','name bio').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
@@ -58,7 +58,7 @@ module.exports={
         club.events.push(event);
         await club.save();
         res.status(200).json({
-            event: event
+            events: event
         })
     },
 
@@ -68,7 +68,7 @@ module.exports={
         const event=await Event.findOne({_id: eventId}).populate('relatedClub','name bio');
         if(event){
             res.status(200).json({
-                event: event
+                events: event
             })
         } else {
             res.status(404).json({

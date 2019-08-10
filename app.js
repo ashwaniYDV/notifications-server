@@ -12,6 +12,7 @@ const lostnfounds=require('./routes/lostnfounds');
 const maintenances=require('./routes/maintenances');
 const complaints=require('./routes/complaints');
 const clubs=require('./routes/clubs');
+const pors=require('./routes/pors');
 const mess=require('./routes/mess');
 
 const app=express();
@@ -44,6 +45,7 @@ app.use('/lostnfounds',lostnfounds);
 app.use('/maintenances',maintenances);
 app.use('/complaints',complaints);
 app.use('/clubs',clubs);
+app.use('/pors',pors);
 app.use('/mess',mess);
 
 //Catch 404 errors and forward them to error handelers
