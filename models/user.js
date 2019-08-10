@@ -7,7 +7,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true //so that ash@gmail.com and ASH@GMAIL.COM are treated same(by default they are diffrent in mongoose)
+    lowercase: true //so that ash@gmail.com and ASH@GMAIL.COM are treated same
   },
   password: {
     type: String,
