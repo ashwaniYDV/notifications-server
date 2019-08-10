@@ -5,7 +5,40 @@ module.exports={
 
     //get all events api (access: auth users)
     getAllEvents: async(req,res,next)=>{
-        const events=await Event.find({}).populate('relatedClub','name bio').sort({_id:-1}).populate('poster','name instituteId');
+        const events=await Event.find({}).populate('relatedClub','name bio').sort({_id:-1});
+        if(events){
+            res.status(200).json({
+                events: events
+            })
+        } else {
+            res.status(404).json({
+                message: "No events found"
+            })
+        }
+    },
+
+    //get all events of a club api (access: auth users)
+    getClubEvents: async(req,res,next)=>{
+        const clubId = req.params.clubId;
+        const events=await Event.find({relatedClub: clubId}).sort({_id:-1});
+        if(events){
+            res.status(200).json({
+                events: events
+            })
+        } else {
+            res.status(404).json({
+                message: "No events found"
+            })
+        }
+    },
+
+    //get events by date api (access: auth users)
+    getEventsByDate: async(req,res,next)=>{
+        const query=parseInt(req.params.timestamp);
+        const greaterThan = query - 60*24*60*60*1000;
+        const lessThan = query + 60*24*60*60*1000;
+
+        const events=await Event.find({}).where('date').gt(greaterThan).lt(lessThan).populate('relatedClub','name bio').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
@@ -32,7 +65,7 @@ module.exports={
     //get event with eventId api (access: auth users)
     getEventWithEventId: async(req,res,next)=>{
         const eventId=req.params.eventId;
-        const event=await Event.findOne({_id: eventId}).populate('poster','name instituteId').populate('relatedClub','name bio');
+        const event=await Event.findOne({_id: eventId}).populate('relatedClub','name bio');
         if(event){
             res.status(200).json({
                 event: event
