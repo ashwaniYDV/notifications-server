@@ -22,7 +22,9 @@ const userSchema = new Schema({
     dafault: false
   },
   por: {
-    type: Array
+    type: Array,
+    required: true,
+    default: []
   },
   pors: [{
     type: Schema.Types.ObjectId,
