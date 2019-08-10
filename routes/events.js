@@ -9,6 +9,16 @@ router.route('/')
     .get(EventsControllers.getAllEvents)
     .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.eventSchema), EventsControllers.postEvent)
 
+
+//localhost:3000/events/club/:clubId
+router.route('/club/:clubId')
+    .get(EventsControllers.getClubEvents)
+
+//localhost:3000/events/club/:clubId
+router.route('/date/:timestamp')
+    .get(EventsControllers.getEventsByDate)
+
+
 //localhost:3000/events/:eventId
 router.route('/:eventId')
     .get(EventsControllers.getEventWithEventId)

@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const eventSchema = new Schema({
-    poster: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
-    },
     relatedClub: {
         type: Schema.Types.ObjectId,
         ref: 'club',
@@ -30,10 +25,6 @@ const eventSchema = new Schema({
     date: {
         type:Number, 
         required: true
-    },
-    eventId: {
-        type:Number,
-        default: new Date().getTime()
     },
     coordinators : { 
         type : Array , 
