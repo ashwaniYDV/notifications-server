@@ -21,10 +21,10 @@ const userSchema = new Schema({
     type: Boolean,
     dafault: false
   },
-  por : {
-    type : Array, 
-    default : []
-  },
+  pors: [{
+    type: Schema.Types.ObjectId,
+    ref: 'por'
+  }],
   instituteId: {
     type: String,
     required: true,

@@ -16,6 +16,10 @@ const clubSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'event'
     }],
+    pors: [{
+        type: Schema.Types.ObjectId,
+        ref: 'por'
+    }],
     followers: {
         type: Number,
         default: 0

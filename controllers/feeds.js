@@ -103,7 +103,6 @@ module.exports={
 
         const feeds=await Feed.find({eventDate: {$gt: query} })
         if(feeds){
-            console.log("oh yess!!!");
             let validFeeds;
             feeds.forEach(f => {
                 if (!(f.feedPoster === null && f.feedPoster === undefined)){
