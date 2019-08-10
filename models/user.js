@@ -21,6 +21,9 @@ const userSchema = new Schema({
     type: Boolean,
     dafault: false
   },
+  por: {
+    type: Array
+  },
   pors: [{
     type: Schema.Types.ObjectId,
     ref: 'por'
