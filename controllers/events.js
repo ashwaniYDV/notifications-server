@@ -20,7 +20,7 @@ module.exports={
     //get all events of a club api (access: auth users)
     getClubEvents: async(req,res,next)=>{
         const clubId = req.params.clubId;
-        const events=await Event.find({relatedClub: clubId}).sort({_id:-1});
+        const events=await Event.find({relatedClub: clubId}).populate('relatedClub','name bio').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
