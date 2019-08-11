@@ -21,7 +21,7 @@ module.exports={
     //get all pors of a club api (access: auth users)
     getClubPors: async(req,res,next)=>{
         const clubId = req.params.clubId;
-        const pors=await Por.find({club: clubId}).sort({_id:-1});
+        const pors=await Por.find({club: clubId}).populate('user', 'name instituteId').sort({_id:-1});
         if(pors){
             res.status(200).json({
                 pors: pors
