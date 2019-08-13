@@ -18,7 +18,7 @@ sendMail = async (email, code) => {
         service: 'gmail',
         auth: {
             user: 'ashyadavash@gmail.com',
-            pass: 'greengolis123'
+            pass: 'ashwani1234yadav'
         }
     });
     let mailOptions = {
