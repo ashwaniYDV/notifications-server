@@ -41,6 +41,8 @@ module.exports={
     signUp: async(req,res,next)=>{
         const {email,password,name}=req.value.body;
 
+        req.value.body.instituteId = req.value.body.instituteId.trim();
+
         const foundUser=await User.findOne({email: email})
         if(foundUser){
             return res.status(403).json({message: "Email is already registered"});
