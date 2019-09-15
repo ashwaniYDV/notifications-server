@@ -170,7 +170,8 @@ module.exports={
                 let errors=0;
 
                 let fullday=mess.fullday.sort();
-                if(first<=fullday[0]){
+
+                if (fullday.includes(first)) {
                     errors++;
                     return res.status(415).json({
                         "message": "Some full day is already cancelled"
@@ -195,7 +196,7 @@ module.exports={
                     });
                     mess.dinner.forEach(e => {
                         if(e === e4){
-                            mess.dinner.pull(e4);
+                            mess.dinner.pull(e);
                         }
                     });
 
