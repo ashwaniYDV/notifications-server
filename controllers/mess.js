@@ -135,7 +135,7 @@ module.exports={
                 mess.fullday.forEach(e => {
                     if(e === data){
                         errors++;
-                        return res.status(401).json({
+                        return res.status(415).json({
                             "message": "Full day is already cancelled"
                         });
                     }
@@ -143,7 +143,7 @@ module.exports={
                 mess[meal].forEach(e => {
                     if(e === data){
                         errors++;
-                        return res.status(401).json({
+                        return res.status(415).json({
                             "message": `${meal} is already cancelled for tomorrow`
                         });
                     }
@@ -172,7 +172,7 @@ module.exports={
                 let fullday=mess.fullday.sort();
                 if(first<=fullday[0]){
                     errors++;
-                    return res.status(401).json({
+                    return res.status(415).json({
                         "message": "Some full day is already cancelled"
                     });
                 }
