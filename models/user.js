@@ -50,7 +50,9 @@ const userSchema = new Schema({
   },
   rollno: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    lowercase: true
   },
   registerDate: {
     type: Date,
