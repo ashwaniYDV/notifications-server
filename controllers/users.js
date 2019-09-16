@@ -119,7 +119,7 @@ module.exports={
                  });
             } else {
                 if (user.code === code) {
-                    User.findByIdAndUpdate({_id: user._id},{active: 1, code: 0},{new:true}).then((updatedUser)=>{
+                    User.findByIdAndUpdate({_id: user._id},{active: 1, code: null},{new:true}).then((updatedUser)=>{
                         const token=signToken(updatedUser);
                         res.status(200).json({
                             token: token,
@@ -167,7 +167,7 @@ module.exports={
     },
 
     resetPwd: async(req,res,next)=>{
-        const { email, code, password, confirmPassword } = req.body;
+        let { email, code, password, confirmPassword } = req.body;
         const user = await User.findOne({email});
         if(user) {
             if(user.code !== code) {
@@ -180,12 +180,12 @@ module.exports={
                     "message": "Passwords do not match"
                  });
             }
-            const pwd=password;
+            let pwd=password;
             const salt = await bcrypt.genSalt(10);
             const passwordHash = await bcrypt.hash(pwd, salt);
             password = passwordHash;
 
-            User.findByIdAndUpdate({_id: user._id},{password, code: 0},{new:true}).then((updatedUser)=>{
+            User.findByIdAndUpdate({_id: user._id},{password, code: null},{new:true}).then((updatedUser)=>{
                 res.status(200).json({
                     "message": "Password reset successful. You can now login with your new password"
                 });

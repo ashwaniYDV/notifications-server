@@ -164,14 +164,12 @@ module.exports={
             if(req.body.fullday !== undefined) {
                 let data=req.body.fullday;
                 data.sort();
-                const first=data[data.length-1];
-                const last=data[0];
+                const first=data[0];
+                const last=data[data.length-1];
 
                 let errors=0;
 
-                let fullday=mess.fullday.sort();
-
-                if (fullday.includes(first)) {
+                if (mess.fullday.includes(first)) {
                     errors++;
                     return res.status(415).json({
                         "message": "Some full day is already cancelled"
