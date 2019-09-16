@@ -40,7 +40,21 @@ module.exports={
                 message: "No feed found"
             })
         }
-        
+    },
+
+    //get feeds of particular user api (access: auth user)
+    getUserFeeds: async(req,res,next)=>{
+        const userId=req.user.id;
+        const feeds=await Feed.find({feedPoster: userId});
+        if(feeds){
+            res.status(200).json({
+                feeds: feeds
+            })
+        } else {
+            res.status(404).json({
+                message: "No feed found"
+            })
+        }
     },
 
     //delete feed using feedId if instituteId of auth user=feedPoster   api (access: feedPoster, superUser)
@@ -66,7 +80,6 @@ module.exports={
                 message: "No feed found"
             })
         }
-        
     },
 
     //update(patch) feed with feedId api (access: feedPoster, superUer)
@@ -93,7 +106,6 @@ module.exports={
                 message: "No feed found"
             })
         }
-        
     },
 
     //get all feeds with timestamp greater than query timestamp api (access: auth suers)
@@ -118,7 +130,6 @@ module.exports={
                 message: "No feeds found"
             })
         }
-        
     },
     
     //get all feeds whose evenId is greater than current timestamp api (access: auth users)
@@ -136,7 +147,6 @@ module.exports={
                 message: "No feeds found"
             })
         }
-        
     },
     
 }

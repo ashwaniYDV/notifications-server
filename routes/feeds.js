@@ -9,6 +9,10 @@ router.route('/')
     .get(FeedsControllers.getAllFeeds)
     .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.feedSchema), FeedsControllers.postFeed)
 
+//localhost:3000/feeds/userfeeds
+router.route('/userfeeds')
+    .get(passport.authenticate('jwt',{session: false}), FeedsControllers.getUserFeeds)
+
 //localhost:3000/feeds/:feedId
 router.route('/:feedId')
     .get(FeedsControllers.getFeedWithFeedId)
