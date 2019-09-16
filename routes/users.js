@@ -27,17 +27,13 @@ router.route('/:userId')
 router.route('/activate')
     .post(UsersControllers.activateUser)
 
+//localhost:3000/users/forgotpwd
+router.route('/forgotpwd')
+    .post(UsersControllers.forgotPwd)
 
-// router.route('/instituteId/:instituteId')
-//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUserByInstituteId)
+//localhost:3000/users/resetpwd
+router.route('/resetpwd')
+    .post(UsersControllers.resetPwd)
 
-// router.route('/batch/:batch')
-//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatch)
-
-// router.route('/branch/:branch')
-//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBranch)
-
-// router.route('/batchAndBranch/:batch/:branch')
-//     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUsersByBatchAndBranch)
 
 module.exports=router;

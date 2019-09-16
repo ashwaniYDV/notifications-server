@@ -35,6 +35,28 @@ sendMail = async (email, code) => {
     }
 }
 
+sendPwdResetMail = async (email, code) => {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'iitpapplication@gmail.com',
+            pass: 'iitpapp@iitp'
+        }
+    });
+    let mailOptions = {
+        from: 'ashyadavash@gmail.com', // TODO: email sender
+        to: email, // TODO: email receiver
+        subject: 'IITP-App, Password Reset Mail',
+        text: `Your password reset code is ${code}`
+    };
+    try {
+        await transporter.sendMail(mailOptions);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 module.exports={
 
     //signup api (access: all)
@@ -113,6 +135,65 @@ module.exports={
         } else {
             res.status(404).json({
                 "message": "User not registered"
+             });
+        }
+    },
+
+    forgotPwd: async(req,res,next)=>{
+        const { email } = req.body;
+        const user = await User.findOne({email});
+        if (user) {
+            let code = Math.floor(100000 + Math.random() * 900000);
+            if(user.active === 0) {
+                code = user.code;
+            }
+            let mailresponse = await sendPwdResetMail(email, code);
+            if(mailresponse === true) {
+                // update user code
+                await User.findByIdAndUpdate({_id: user._id},{code: code});
+                res.status(200).json({
+                    message: "Password reset code is sent to your webmail account"
+                })
+            } else {
+                res.status(504).json({
+                    message: "Could not send password reset code to your webmail account"
+                })
+            }
+        } else {
+            res.status(404).json({
+                "message": "No user found for this webmail"
+             });
+        }
+    },
+
+    resetPwd: async(req,res,next)=>{
+        const { email, code, password, confirmPassword } = req.body;
+        const user = await User.findOne({email});
+        if(user) {
+            if(user.code !== code) {
+                return res.status(401).json({
+                    "message": "Incorrect reset password code"
+                 });
+            }
+            if(password !== confirmPassword){
+                return res.status(403).json({
+                    "message": "Passwords do not match"
+                 });
+            }
+            const pwd=password;
+            const salt = await bcrypt.genSalt(10);
+            const passwordHash = await bcrypt.hash(pwd, salt);
+            password = passwordHash;
+
+            User.findByIdAndUpdate({_id: user._id},{password, code: 0},{new:true}).then((updatedUser)=>{
+                res.status(200).json({
+                    "message": "Password reset successful. You can now login with your new password"
+                });
+            });
+            
+        } else {
+            res.status(404).json({
+                "message": "No user found for this webmail"
              });
         }
     },
@@ -224,72 +305,6 @@ module.exports={
 
         
     },
-
-    // //get user by instituteId api (access: auth users)
-    // getUserByInstituteId: async(req,res,next)=>{
-    //     const instituteId = req.params.instituteId;
-
-    //     const user=await User.findOne({instituteId: instituteId})
-    //     if(user){
-    //         res.status(200).json({
-    //             user: user
-    //         })
-    //     } else {
-    //         res.status(404).json({
-    //             message: "User not found"
-    //         })
-    //     }
-    // },
-
-    // //get users by batch api (access: auth users)
-    // getUsersByBatch: async(req,res,next)=>{
-    //     const batch = req.params.batch;
-
-    //     const users=await User.find({batch: batch})
-    //     if(users){
-    //         res.status(200).json({
-    //             users: users
-    //         })
-    //     } else {
-    //         res.status(404).json({
-    //             message: "Users not found"
-    //         })
-    //     }
-    // },
-
-    // //get users by branch api (access: auth users)
-    // getUsersByBranch: async(req,res,next)=>{
-    //     const branch = req.params.branch;
-
-    //     const users=await User.find({branch: branch})
-    //     if(users){
-    //         res.status(200).json({
-    //             users: users
-    //         })
-    //     } else {
-    //         res.status(404).json({
-    //             message: "Users not found"
-    //         })
-    //     }
-    // },
-
-    // //get users by batch and branch api (access: auth users)
-    // getUsersByBatchAndBranch: async(req,res,next)=>{
-
-    //     const batch = req.params.batch;
-    //     const branch = req.params.branch;
-
-    //     const users=await User.find({batch: batch, branch: branch})
-    //     if(users){
-    //         res.status(200).json({
-    //             users: users
-    //         })
-    //     } else {
-    //         res.status(404).json({
-    //             message: "Users not found"
-    //         })
-    //     }
-    // },
     
 
 }
