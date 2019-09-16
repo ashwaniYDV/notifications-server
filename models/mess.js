@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const messSchema = new Schema({
-    studentMongoId: {
-        type: String, //user._id
-        required: true
-    },
     student: {
         type: Schema.Types.ObjectId,
         ref: 'user',
@@ -13,23 +9,27 @@ const messSchema = new Schema({
     },
     messChoice: {
         type:Number,
-        required: true
     },
-    currentMeal: {
-        type: String
-    },
-    takenMeals : {
+    fullday : {
         type : Array,
         "default" : []
     },
-    cancelledMeals : {
+    breakfast : {
         type : Array,
         "default" : []
     },
-    timestamp: {
-        type:Number,
-        default: new Date().getTime()
+    lunch : {
+        type : Array,
+        "default" : []
     },
+    snacks : {
+        type : Array,
+        "default" : []
+    },
+    dinner : {
+        type : Array,
+        "default" : []
+    }
 });
 
 

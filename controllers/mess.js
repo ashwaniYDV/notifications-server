@@ -4,7 +4,7 @@ module.exports={
 
     //get all mess api (access: )
     getAllMess: async(req,res,next)=>{
-        const mess=await Mess.find({})
+        const mess=await Mess.find({}).populate('student','name instituteId');
         if(mess){
             res.status(200).json({
                 mess: mess
@@ -18,7 +18,12 @@ module.exports={
 
     //post (access: )
     postMess: async(req,res,next)=>{
-        const result=await Mess.findOne({studentMongoId: req.value.body.studentMongoId});
+        if(req.user.id !== req.value.body.student){
+            return res.status(401).json({
+                message: "Unauthorized request"
+            })
+        }
+        const result=await Mess.findOne({student: req.value.body.student});
         if(result){
             res.status(422).json({
                 "message": "Student mess data already exists"
@@ -37,7 +42,7 @@ module.exports={
     //get (access: )
     getMessWithStudentMongoId: async(req,res,next)=>{
         const studentMongoId=req.params.studentMongoId;
-        let mess=await Mess.findOne({studentMongoId: studentMongoId}).populate('student','name instituteId');
+        let mess=await Mess.findOne({student: studentMongoId}).populate('student','name instituteId');
         if(mess){
             res.status(200).json({
                 mess: mess
@@ -52,8 +57,13 @@ module.exports={
     //delete api (access: )
     deleteMessWithStudentMongoId: async(req,res,next)=>{
         const studentMongoId=req.params.studentMongoId;
+        if(req.user.id !== studentMongoId){
+            return res.status(401).json({
+                message: "Unauthorized request"
+            })
+        }
 
-        const mess=await Mess.findOne({studentMongoId: studentMongoId})
+        const mess=await Mess.findOne({student: studentMongoId})
         if(mess){
             await Mess.findByIdAndRemove({_id: mess._id});
             res.status(200).json({
@@ -70,8 +80,13 @@ module.exports={
     //update(patch) (access: )
     patchMessWithStudentMongoId: async(req,res,next)=>{
         const studentMongoId=req.params.studentMongoId;
+        if(req.user.id !== studentMongoId){
+            return res.status(401).json({
+                message: "Unauthorized request"
+            })
+        }
 
-        const mess=await Mess.findOne({studentMongoId: studentMongoId})
+        const mess=await Mess.findOne({student: studentMongoId})
         if(mess){
             Mess.findByIdAndUpdate({_id: mess._id},req.value.body,{new:true}).then((updatedMess)=>{
                 res.status(200).json({
@@ -88,112 +103,116 @@ module.exports={
     //update(patch) (access: )
     cancelMeal: async(req,res,next)=>{
         const studentMongoId=req.params.studentMongoId;
-
-        const mess=await Mess.findOne({studentMongoId: studentMongoId});
-        if(mess){
-            let currentMeal=req.value.body.currentMeal;
-            let result=currentMeal.split('_');
-            let dd=parseInt(result[0]);
-            let mm=parseInt(result[1]);
-            let yyyy=parseInt(result[2]);
-            let mealno=parseInt(result[3]);
-            let mealstatus=parseInt(result[4]);
-            let date=new Date().getDate();
-            let month=new Date().getMonth()+1;
-            let year=new Date().getFullYear();
-
-            let errorCount=0;
-
-            if((dd<date && mm<=month && yyyy<=year) || (mm<month && yyyy<=year) || (yyyy<year) ) {
-                errorCount++;
-                return res.status(404).json({message: "This meal does not exist!"});
-            }
-
-            if((mealno==1 || mealno==2 || mealno==3 || mealno==4) && dd==date){
-                errorCount++;
-                return res.status(401).json({message: "You can cancel meals for tomorrow and onwards. You cannot cancel todays meal."});
-            }
-
-            totalCancelledMealsInCurrentMonth=0;
-            mess.cancelledMeals.forEach((data)=>{
-                if(data==currentMeal){
-                    errorCount++;
-                    return res.status(422).json({message: "Meal already cancelled."});
-                }
-                let result=data.split('_');
-                let dd=parseInt(result[0]);
-                let mm=parseInt(result[1]);
-                let yyyy=parseInt(result[2]);
-                let mealno=parseInt(result[3]);
-                if(mm==month && yyyy==year){
-                    totalCancelledMealsInCurrentMonth++;
-                }
+        if(req.user.id !== studentMongoId){
+            return res.status(401).json({
+                message: "Unauthorized request"
             })
-            if(totalCancelledMealsInCurrentMonth>10) {
-                errorCount++;
-                return res.status(401).json({message: "You can cancel only 10 meals per month."});
-            }
+        }
 
-            if(errorCount==0){
-                let oldData=mess.cancelledMeals;
-                oldData.push(currentMeal);
-                Mess.findByIdAndUpdate({_id: mess._id},{cancelledMeals: oldData},{new:true}).then((updatedMess)=>{
-                    res.status(200).json({
-                        "message": "Meal cancelled successfully."
-                    });
+        const mess=await Mess.findOne({student: studentMongoId});
+        if(mess){
+            // breakfast, lunch, snacks, dinner
+            if(req.body.breakfast !== undefined || req.body.lunch !== undefined || req.body.snacks !== undefined || req.body.dinner !== undefined ) {
+                let data,meal;
+                if(req.body.breakfast !== undefined){
+                    data=req.body.breakfast[0];
+                    meal="breakfast";
+                }
+                if(req.body.lunch !== undefined){
+                    data=req.body.lunch[0];
+                    meal="lunch";
+                }
+                if(req.body.snacks !== undefined){
+                    data=req.body.snacks[0];
+                    meal="snacks";
+                }
+                if(req.body.dinner !== undefined){
+                    data=req.body.dinner[0];
+                    meal="dinner";
+                }
+
+                let errors=0;
+                mess.fullday.forEach(e => {
+                    if(e === data){
+                        errors++;
+                        return res.status(401).json({
+                            "message": "Full day is already cancelled"
+                        });
+                    }
                 });
-            }
-        } else {
-            res.status(404).json({
-                message: "No mess data found"
-            })
-        }  
-    },
+                mess[meal].forEach(e => {
+                    if(e === data){
+                        errors++;
+                        return res.status(401).json({
+                            "message": `${meal} is already cancelled for tomorrow`
+                        });
+                    }
+                });
 
-    //update(patch) (access: )
-    manageMeal: async(req,res,next)=>{
-        const studentMongoId=req.params.studentMongoId;
+                if(errors>0)
+                return;
 
-        const mess=await Mess.findOne({studentMongoId: studentMongoId})
-        if(mess){
-            let currentMeal=req.value.body.currentMeal;
-            let result=currentMeal.split('_');
-            let dd=parseInt(result[0]);
-            let mm=parseInt(result[1]);
-            let yyyy=parseInt(result[2]);
-            let mealno=parseInt(result[3]);
-            let mealstatus=parseInt(result[4]);
-
-            let errorCount=0;
-            mess.cancelledMeals.forEach((data)=>{
-                let result=data.split('_');
-                if(dd==parseInt(result[0]) && mm==parseInt(result[1]) && yyyy==parseInt(result[2]) && mealno==parseInt(result[3])){
-                    errorCount++;
-                    return res.status(401).json({
-                        "message": "Meal is cancelled"
-                    });
-                }
-            })
-
-            mess.takenMeals.forEach((data)=>{
-                if(currentMeal===data){
-                    errorCount++;
-                    return res.status(403).json({
-                        "message": "Meal is already taken"
-                    });
-                }
-            })
-
-            if(errorCount==0){
-                let oldData=mess.takenMeals;
-                let newMeal=result[0]+"_"+result[1]+"_"+result[2]+"_"+result[3]+"_"+"1";
-                oldData.push(newMeal);
-                Mess.findByIdAndUpdate({_id: mess._id},{takenMeals: oldData},{new:true}).then((updatedMess)=>{
-                    res.status(200).json({
+                mess[meal].push(data);
+                Mess.findByIdAndUpdate({_id: mess._id},mess,{new:true}).then((updatedMess)=>{
+                    return res.status(200).json({
                         "message": "Meal updated"
                     });
                 });
             }
+
+            // fullday
+            if(req.body.fullday !== undefined) {
+                let data=req.body.fullday;
+                data.sort();
+                const first=data[data.length-1];
+                const last=data[0];
+
+                let errors=0;
+
+                let fullday=mess.fullday.sort();
+                if(first<=fullday[0]){
+                    errors++;
+                    return res.status(401).json({
+                        "message": "Some full day is already cancelled"
+                    });
+                }
+
+                data.forEach(e => {
+                    mess.breakfast.forEach(e1 => {
+                        if(e === e1){
+                            mess.breakfast.pull(e);
+                        }
+                    });
+                    mess.lunch.forEach(e2 => {
+                        if(e === e2){
+                            mess.lunch.pull(e);
+                        }
+                    });
+                    mess.snacks.forEach(e3 => {
+                        if(e === e3){
+                            mess.snacks.pull(e);
+                        }
+                    });
+                    mess.dinner.forEach(e => {
+                        if(e === e4){
+                            mess.dinner.pull(e4);
+                        }
+                    });
+
+                    mess.fullday.push(e);
+
+                });
+     
+
+                if(errors>0)
+                return;
+
+                Mess.findByIdAndUpdate({_id: mess._id},mess,{new:true}).then((updatedMess)=>{
+                    return res.status(200).json({
+                        "message": "Meal cancelled"
+                    });
+                });
+            }
         } else {
             res.status(404).json({
                 message: "No mess data found"
@@ -201,26 +220,11 @@ module.exports={
         }  
     },
 
-    //getAllDataOfMess (access: )
-    getAllDataOfMess: async(req,res,next)=>{
-        const messName=req.params.messName;
-        let mess=await Mess.find({messChoice: messName},{studentMongoId: 1, student: 2, messChoice: 3}).populate('student','name instituteId');
-        if(mess.length){
-            res.status(200).json({
-                mess: mess
-            })
-        } else {
-            res.status(404).json({
-                message: "No mess data found"
-            })
-        }
-    },
-
-    //getAllCancelledDataOfMess (access: )
-    getAllCancelledDataOfMess: async(req,res,next)=>{
-        const messName=req.params.messName;
-        let mess=await Mess.find({messChoice: messName},{student: 2, cancelledMeals: 6}).populate('student','name instituteId');
-        if(mess.length){
+     //get all data of mess by messChoice api (access: )
+     getAllDataOfMess: async(req,res,next)=>{
+        const messChoice = req.params.messChoice;
+        const mess=await Mess.find({messChoice}).populate('student','name instituteId');
+        if(mess){
             res.status(200).json({
                 mess: mess
             })

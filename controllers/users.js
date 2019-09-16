@@ -58,7 +58,6 @@ module.exports={
         req.value.body.code=code;
         let mailresponse = await sendMail(email, code);
         if(mailresponse === true) {
-            console.log('yeessss');
 
             //create a new user
             const newUser=new User(req.value.body);
@@ -69,7 +68,6 @@ module.exports={
                 user: newUser
             })
         } else {
-            console.log('nooo');
             res.status(500).json({
                 message: "Could not register your account"
             })
@@ -154,7 +152,6 @@ module.exports={
     patchUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
-        // if (userId==req.user._id || req.user.isSuperUser) {
         if (userId==req.user.id && !req.user.isSuperUser) {
             if(req.value.body.password!=undefined) {
                 const pwd=req.value.body.password;
