@@ -53,6 +53,7 @@ module.exports={
         const club=await Club.findById(req.value.body.club);
         const user=await User.findById(req.value.body.user);
         const por=new Por(req.value.body);
+        por.access = 0;
         await por.save();
         club.pors.push(por);
         await club.save();

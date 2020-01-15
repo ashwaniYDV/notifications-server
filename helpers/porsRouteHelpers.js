@@ -21,7 +21,7 @@ module.exports={
     schemas: {
         porSchema: Joi.object().keys({
             position: Joi.string().required(),
-            access: Joi.number().required()
+            access: Joi.number()
         }).unknown(true)
     }
 }

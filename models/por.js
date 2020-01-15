@@ -18,7 +18,8 @@ const porSchema = new Schema({
     },
     access: {
         type: Number,
-        required: true
+        required: false,
+        default: 0
     }
 });
 
