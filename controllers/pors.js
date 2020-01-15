@@ -110,7 +110,7 @@ module.exports={
 
     },
 
-    //update(patch) por with porId api (access: superUer)
+    //update(patch) por with porId api (access: superUser)
     patchPorWithPorId: async(req,res,next)=>{
         if(!req.user.isSuperUser) {
             return res.status(401).json({
@@ -121,6 +121,30 @@ module.exports={
         const por=await Por.findOne({_id: porId})
         if(por){
             Por.findByIdAndUpdate({_id: porId},req.value.body,{new:true}).then((por)=>{
+                res.status(200).json({
+                    pors: por
+                });
+            });
+        } else {
+            res.status(404).json({
+                message: "No por found"
+            })
+        }
+    },
+
+    //update(patch) por with porId api (access: superUser)
+    approvePor: async(req,res,next)=>{
+        if(!req.user.isSuperUser) {
+            return res.status(401).json({
+                message: "Unauthorized approve request" 
+            });
+        }
+
+        const porId = req.value.body.porId;
+
+        const por = await Por.findOne({_id: porId})
+        if(por){
+            Por.findByIdAndUpdate({_id: porId},{access: req.value.body.access},{new:true}).then((por)=>{
                 res.status(200).json({
                     pors: por
                 });

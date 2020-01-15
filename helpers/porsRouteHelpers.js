@@ -22,6 +22,10 @@ module.exports={
         porSchema: Joi.object().keys({
             position: Joi.string().required(),
             access: Joi.number()
+        }).unknown(true),
+        approveSchema: Joi.object().keys({
+            porId: Joi.string().required(),
+            access: Joi.number().required()
         }).unknown(true)
     }
 }

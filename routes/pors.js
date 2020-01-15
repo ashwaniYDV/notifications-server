@@ -23,4 +23,8 @@ router.route('/:porId')
     .delete(passport.authenticate('jwt',{session: false}), PorsControllers.deletePorWithPorId)
     .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.porSchema), PorsControllers.patchPorWithPorId)
 
+router.route('/approve')
+    .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.approveSchema), PorsControllers.approvePor)
+
+
 module.exports=router;
