@@ -168,24 +168,31 @@ module.exports={
 
     resetPwd: async(req,res,next)=>{
         let { email, code, password, confirmPassword } = req.body;
+
+        if (code == 0) {
+            return res.status(407).json({
+                "message": "Invalid reset password code"
+            });
+        }
+
         const user = await User.findOne({email});
         if(user) {
             if(user.code !== code) {
                 return res.status(401).json({
                     "message": "Incorrect reset password code"
-                 });
+                });
             }
             if(password !== confirmPassword){
                 return res.status(403).json({
                     "message": "Passwords do not match"
-                 });
+                });
             }
             let pwd=password;
             const salt = await bcrypt.genSalt(10);
             const passwordHash = await bcrypt.hash(pwd, salt);
             password = passwordHash;
 
-            User.findByIdAndUpdate({_id: user._id},{password, code: null},{new:true}).then((updatedUser)=>{
+            User.findByIdAndUpdate({_id: user._id},{password, code: 0},{new:true}).then((updatedUser)=>{
                 res.status(200).json({
                     "message": "Password reset successful. You can now login with your new password"
                 });
