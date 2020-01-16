@@ -3,7 +3,6 @@ const morgan=require('morgan');
 const bodyParser=require('body-parser');
 const mongoose=require('mongoose');
 const cors=require('cors');
-const {mongoURI}=require('./configs/config');
 
 const users=require('./routes/users');
 const feeds=require('./routes/feeds');
@@ -20,7 +19,7 @@ const app=express();
 let server = require('http').Server(app);
 
 // Connecting to database
-const db = mongoURI;
+const db = process.env.DB_URI;
 mongoose
     .connect(db, {
         useNewUrlParser: true,
