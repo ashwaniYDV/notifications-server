@@ -13,15 +13,15 @@ const complaints=require('./routes/complaints');
 const clubs=require('./routes/clubs');
 const pors=require('./routes/pors');
 const mess=require('./routes/mess');
+const {DB_URI}=require('./configs/config');
 
 const app=express();
 
 let server = require('http').Server(app);
 
 // Connecting to database
-const db = process.env.DB_URI;
 mongoose
-    .connect(db, {
+    .connect(DB_URI, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false
