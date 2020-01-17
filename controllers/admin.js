@@ -7,9 +7,8 @@ module.exports={
         const json = req.value.body;
         const key = FCM_KEY
 
-        await feed.save();
         res.status(200).json({
-            feed: feed
+            message: "Notification sent."
         })
     },
 
