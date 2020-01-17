@@ -13,6 +13,7 @@ const complaints=require('./routes/complaints');
 const clubs=require('./routes/clubs');
 const pors=require('./routes/pors');
 const mess=require('./routes/mess');
+const admin=require('./routes/admin');
 const {DB_URI}=require('./configs/config');
 
 const app=express();
@@ -46,6 +47,7 @@ app.use('/complaints',complaints);
 app.use('/clubs',clubs);
 app.use('/pors',pors);
 app.use('/mess',mess);
+app.use('/admin',admin);
 
 //Catch 404 errors and forward them to error handelers
 app.use((req,res,next)=>{
