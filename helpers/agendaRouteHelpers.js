@@ -17,10 +17,10 @@ module.exports={
     },
     //valiadtion schemas
     schemas: {
-        maintenanceSchema: Joi.object().keys({
-            category: Joi.number().required(),
+        agendaSchema: Joi.object().keys({
+            category: Joi.string().required(),
             status: Joi.string(),
-            problem: Joi.string(),
+            problem: Joi.string().required(),
             imageUrl: Joi.string()
         }).unknown(true)
     }
