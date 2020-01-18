@@ -2,18 +2,41 @@ const Agenda=require('../models/agenda');
 
 module.exports={
 
-    //get all maintenances api (access: auth users)
+    //get all agenda api (access: auth users)
     getAllAgenda: async(req,res,next)=>{
-        const agendas=await Agenda.find({active: true}).populate('poster', 'name instituteId').populate('likes', 'name instituteId').sort({_id:-1});
+
+        const userId = req.user._id;
+
+        const agendas = await Agenda.aggregate(
+            [
+                { "$project": {
+                    "poster": 1,
+                    "category": 1,
+                    "status": 1,
+                    "problem": 1,
+                    "imageUrl":1,
+                    "likesCount": { "$size": "$likes" },
+                    "liked" : { $in: [userId, "$likes"] },
+                }},
+                { "$sort": { "likesCount": -1 } },
+                
+            ]
+        );
+
         if(agendas){
+            const newAgendas = await Agenda.populate(agendas, {path:'poster', select:{name:1, instituteId:1}})
+
             res.status(200).json({
-                agendas: agendas
+                agendas: newAgendas
             })
         } else {
             res.status(404).json({
                 message: "No agendas found"
             })
         }
+
+        // const agendas=await Agenda.find({active: true}).populate('poster', 'name instituteId').populate('likes', 'name instituteId').sort({_id:-1});
+        
         
     },
 
