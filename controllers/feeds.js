@@ -107,30 +107,6 @@ module.exports={
             })
         }
     },
-
-    //get all feeds with timestamp greater than query timestamp api (access: auth suers)
-    getAllFeedsWithTimestamp: async(req,res,next)=>{
-        const timestamp=req.params.timestamp;
-        const query=parseInt(timestamp);
-
-        const feeds=await Feed.find({eventDate: {$gt: query} })
-        if(feeds){
-            let validFeeds;
-            feeds.forEach(f => {
-                if (!(f.feedPoster === null && f.feedPoster === undefined)){
-                    validFeeds.push(f);
-                }
-            });
-
-            res.status(200).json({
-                feeds: validFeeds
-            })
-        } else {
-            res.status(404).json({
-                message: "No feeds found"
-            })
-        }
-    },
     
     //get all feeds whose evenId is greater than current timestamp api (access: auth users)
     getLatestFeedsWithCurrentTimestamp: async(req,res,next)=>{

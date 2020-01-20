@@ -9,7 +9,7 @@ const feedSchema = new Schema({
     },
     eventVenue: {
         type: String,
-        required: true
+        required: false
     },
     eventName: {
         type: String,
@@ -24,7 +24,7 @@ const feedSchema = new Schema({
     },
     eventDate: {
         type:Number, 
-        required: true
+        required: false
     },
     eventId: {
         type:Number,
@@ -37,6 +37,14 @@ const feedSchema = new Schema({
     postLinks : {
         type : Array , 
         "default" : []
+    },
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }],
+    active: {
+        type: Boolean,
+        default: true
     }
 });
 
