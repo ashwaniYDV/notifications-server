@@ -5,7 +5,7 @@ module.exports={
 
     //get all feeds api (access: auth users)
     getAllFeeds: async(req,res,next)=>{
-        const feeds=await Feed.find({}).populate('feedPoster','name instituteId').sort({eventId:-1});
+        const feeds=await Feed.find({active:true}).populate('feedPoster','name instituteId').sort({eventId:-1});
         if(feeds){
             res.status(200).json({
                 feeds: feeds
@@ -124,5 +124,52 @@ module.exports={
             })
         }
     },
-    
+
+    //like a agenda api (access: auth users)
+    reactFeed: async(req, res, next) => {
+        const currUser = req.user;
+        const feedId = req.params.feedId;
+
+        const feed = await Feed.findOne({_id: feedId})
+
+        if (feed) {
+            if (feed.likes.indexOf(currUser._id) < 0) {
+                feed.likes.push(currUser)
+                await feed.save();
+                res.status(201).json({
+                    message: 'Liked'
+                })
+            } else {
+                let i = feed.likes.indexOf(currUser._id);
+                feed.likes.splice(i, 1);
+                await feed.save();
+                res.status(202).json({
+                    message: 'Unliked'
+                })
+            }
+        }
+    },
+
+    //get reacts on an agenda api (access: auth users)
+    getFeedReacts: async(req, res, next) => {
+        const feedId = req.params.feedId;
+
+        const feed = await Feed.findOne({_id: feedId}).populate('likes', 'name instituteId');
+
+        if (feed) {
+            if (feed.likes) {
+                res.status(200).json({
+                    likes: feed.likes
+                })
+            } else {
+                res.status(402).json({
+                    message: 'No likes found!'
+                })
+            }            
+        } else {
+            res.status(404).json({
+                message: 'Feed not found!'
+            })
+        }
+    },    
 }

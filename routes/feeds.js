@@ -24,4 +24,11 @@ router.route('/:feedId')
 router.route('/latestFeed/:timestamp')
     .get(FeedsControllers.getLatestFeedsWithCurrentTimestamp)
 
+//localhost:3000/feeds/react/{feedId}
+router.route('/react/:feedId')
+    .post(passport.authenticate('jwt', {session: false}), FeedsControllers.reactFeed)
+    .get(passport.authenticate('jwt', {session: false}), FeedsControllers.getFeedReacts)
+
+
+
 module.exports=router;

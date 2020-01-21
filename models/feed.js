@@ -44,7 +44,8 @@ const feedSchema = new Schema({
     }],
     active: {
         type: Boolean,
-        default: true
+        default: true,
+        required: true
     }
 });
 
