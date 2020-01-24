@@ -20,6 +20,7 @@ module.exports={
     //post a feed api (access: auth users)
     postFeed: async(req,res,next)=>{
         const feed=new Feed(req.value.body);
+        feed.feedPoster = req.user.id;
         await feed.save();
         res.status(200).json({
             feed: feed
