@@ -20,20 +20,12 @@ const clubSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'por'
     }],
-    followers: {
-        type: Number,
-        default: 0
-    },
-    coordinators: {
-        type : Array ,
-        default : []
-    },
-    subCoordinators: {
-        type : Array , 
-        default : []
-    },
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }],
     pages: {
-        type : Array , 
+        type : Array, 
         default : []
     },
     website: {
