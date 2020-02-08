@@ -18,7 +18,6 @@ router.route('/club/:clubId')
 router.route('/date/:timestamp')
     .get(EventsControllers.getEventsByDate)
 
-
 //localhost:3000/events/:eventId
 router.route('/:eventId')
     .get(EventsControllers.getEventWithEventId)

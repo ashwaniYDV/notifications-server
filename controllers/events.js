@@ -1,5 +1,6 @@
 const Event=require('../models/event');
 const Club=require('../models/club');
+const Por=require('../models/por');
 
 module.exports={
 
@@ -52,28 +53,45 @@ module.exports={
 
     //post a event api (access: auth users)
     postEvent: async(req,res,next)=>{
-        const club=await Club.findById(req.value.body.relatedClub);
-        const event=new Event(req.value.body);
-        await event.save();
-        club.events.push(event);
-        await club.save();
-        res.status(200).json({
-            events: event
-        })
+
+        const currUser = req.user;
+        const clubId = req.value.body.relatedClub;
+        const currPor = await Por.findOne({club:clubId, user: currUser._id});
+
+        if (currPor && currPor.access > 0) {
+
+            const club=await Club.findById(clubId);
+            if (club) {
+                const event=new Event(req.value.body);
+                await event.save();
+                club.events.push(event);
+                await club.save();
+                res.status(200).json({
+                    events: event
+                })
+            } else {
+                res.status(404).json({
+                    message: "Club not found!"
+                })
+            }
+
+        } else {
+            res.status(401).json({
+                message: "Unauthorized user!"
+            })
+        }
+
+        
     },
 
     //get event with eventId api (access: auth users)
     getEventWithEventId: async(req,res,next)=>{
         const eventId=req.params.eventId;
-        const event=await Event.findOne({_id: eventId}).populate('relatedClub','name bio');
+        const event=await Event.findOne({_id: eventId}).populate('relatedClub','name bio image');
         if(event){
-            res.status(200).json({
-                events: event
-            })
+            res.status(200).send(event);
         } else {
-            res.status(404).json({
-                message: "No event found"
-            })
+            res.status(404).send("No event found");
         }
         
     },
