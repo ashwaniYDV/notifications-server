@@ -6,7 +6,7 @@ module.exports={
 
     //get all events api (access: auth users)
     getAllEvents: async(req,res,next)=>{
-        const events=await Event.find({}).populate('relatedClub','name bio').sort({_id:-1});
+        const events=await Event.find({}).populate('relatedClub','name bio image').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
@@ -21,7 +21,7 @@ module.exports={
     //get all events of a club api (access: auth users)
     getClubEvents: async(req,res,next)=>{
         const clubId = req.params.clubId;
-        const events=await Event.find({relatedClub: clubId}).populate('relatedClub','name bio').sort({_id:-1});
+        const events=await Event.find({relatedClub: clubId}).populate('relatedClub','name bio image').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
@@ -39,7 +39,7 @@ module.exports={
         const greaterThan = query - 60*24*60*60*1000;
         const lessThan = query + 60*24*60*60*1000;
 
-        const events=await Event.find({date: {$gt: greaterThan, $lt: lessThan}}).populate('relatedClub','name bio').sort({_id:-1});
+        const events=await Event.find({date: {$gt: greaterThan, $lt: lessThan}}).populate('relatedClub','name bio image').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
