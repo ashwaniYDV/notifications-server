@@ -1,28 +1,29 @@
-const express=require('express');
-const morgan=require('morgan');
-const bodyParser=require('body-parser');
-const mongoose=require('mongoose');
-const cors=require('cors');
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-const users=require('./routes/users');
-const feeds=require('./routes/feeds');
-const events=require('./routes/events');
-const lostnfounds=require('./routes/lostnfounds');
-const agendas=require('./routes/agenda');
-const complaints=require('./routes/complaints');
-const clubs=require('./routes/clubs');
-const pors=require('./routes/pors');
-const mess=require('./routes/mess');
-const admin=require('./routes/admin');
-const {DB_URI}=require('./configs/config');
+const users = require('./routes/users');
+const feeds = require('./routes/feeds');
+const events = require('./routes/events');
+const lostnfounds = require('./routes/lostnfounds');
+const agendas = require('./routes/agenda');
+const complaints = require('./routes/complaints');
+const clubs = require('./routes/clubs');
+const pors = require('./routes/pors');
+const mess = require('./routes/mess');
+const admin = require('./routes/admin');
+const {
+    DB_URI
+} = require('./configs/config');
 
-const app=express();
+const app = express();
 
 let server = require('http').Server(app);
 
 // Connecting to database
-mongoose
-    .connect(DB_URI, {
+mongoose.connect(DB_URI, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false
@@ -38,38 +39,60 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 //Routes
-app.use('/users',users);
-app.use('/feeds',feeds);
-app.use('/events',events);
-app.use('/lostnfounds',lostnfounds);
-app.use('/agendas',agendas);
-app.use('/complaints',complaints);
-app.use('/clubs',clubs);
-app.use('/pors',pors);
-app.use('/mess',mess);
-app.use('/admin',admin);
+app.use('/users', users);
+app.use('/feeds', feeds);
+app.use('/events', events);
+app.use('/lostnfounds', lostnfounds);
+app.use('/agendas', agendas);
+app.use('/complaints', complaints);
+app.use('/clubs', clubs);
+app.use('/pors', pors);
+app.use('/mess', mess);
+app.use('/admin', admin);
+
+
+const AdminBro = require('admin-bro')
+const AdminBroExpressjs = require('admin-bro-expressjs')
+const AdminBroMongoose = require('admin-bro-mongoose')
+AdminBro.registerAdapter(AdminBroMongoose)
+
+const adminBro = new AdminBro({
+    resources: [mongoose.model('feed'),
+        mongoose.model('user'),
+        mongoose.model('notification'),
+        mongoose.model('agenda'),
+        mongoose.model('club'),
+        mongoose.model('por'),
+        mongoose.model('event')
+    ],
+    rootPath: '/admin',
+})
+
+const adminRouter = AdminBroExpressjs.buildRouter(adminBro)
+app.use(adminBro.options.rootPath, adminRouter);
+
 
 //Catch 404 errors and forward them to error handelers
-app.use((req,res,next)=>{
-    const err=new Error('Not Found');
-    err.status=404;
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
     next(err);
 })
 
 //Error handeler function
-app.use((err,req,res,next)=>{
-    const error=err;
-    const status=err.status||500;
+app.use((err, req, res, next) => {
+    const error = err;
+    const status = err.status || 500;
     //respond to clients
     res.status(status).json({
         message: error.message
     });
     //respond to ourselves
-    console.error(err); 
+    console.error(err);
 })
 
 //Start the server
 var port = process.env.PORT || 5000;
-server.listen(port, function() {
-  console.log("App is running on port " + port);
+server.listen(port, function () {
+    console.log("App is running on port " + port);
 });
