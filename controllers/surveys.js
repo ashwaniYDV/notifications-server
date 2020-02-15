@@ -97,8 +97,8 @@ module.exports = {
         const survey = await Survey.findById(surveyId);
 
         if (survey) {
-
-            if (survey.poster != currUser._id) {
+            
+            if (currUser._id != String(survey.poster)) {
                 res.status(401).send("Unauthorised user!");
             } else {
 
@@ -121,10 +121,10 @@ module.exports = {
         const survey = await Survey.findById(surveyId);
 
         let access = false;
-        if (survey.poster == userId) access = true;
+        if (String(survey.poster) == userId) access = true;
         if (access === false) {
             for (const a in survey.responses_access) {
-                if (a.user == userId) {
+                if (String(a.user) == userId) {
                     access = true;
                     break;
                 }
