@@ -1,4 +1,5 @@
 const Club=require('../models/club');
+const Por=require('../models/por');
 
 module.exports={
 
@@ -133,28 +134,25 @@ module.exports={
 
     //update(patch) club with clubId api (access: superUer)
     patchClubWithClubId: async(req,res,next)=>{
-        const clubId=req.params.clubId;
+        const clubId = req.params.clubId;
+        const currUser = req.user;
 
-        const club=await Club.findOne({_id: clubId})
-        if(club){
-            if(req.user.isSuperUser==true) {
-                Club.findByIdAndUpdate({_id: clubId},req.value.body,{new:true}).then((updatedClub)=>{
-                    res.status(200).json({
-                        updatedClub: updatedClub
-                    });
-                });
-            } else {
-                res.status(401).json({
-                    message: "Unauthorized update request"
-                });
-            }
-            
+        const currPor = await Por.findOne({club:clubId, user: currUser._id});
+
+        if ((currPor && currPor.access > 0) || currUser.isSuperUser === true) {
+
+            Club.findByIdAndUpdate({_id: clubId},req.value.body,{new:true}).then((updatedClub)=>{
+                res.status(200).send("Club updated.");
+            }).catch((error) => {
+                res.status(422).send("Update error!\n" + error);
+                console.log(error);
+            });
+
         } else {
-            res.status(404).json({
-                message: "No club found"
+            res.status(401).json({
+                message: "Unauthorized user!"
             })
         }
-        
     },
 
     followClub: async(req, res, next) => {
