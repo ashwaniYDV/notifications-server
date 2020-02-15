@@ -1,7 +1,6 @@
 const Joi=require('joi');
 
 module.exports={
-
     validateBody: (schema)=>{
         return (req,res,next)=>{
             
@@ -16,16 +15,16 @@ module.exports={
             next();
         }
     },
-    
     //valiadtion schemas
     schemas: {
-        clubSchema: Joi.object().keys({
-            name: Joi.string().required(),
-            bio: Joi.string().required(),
+        notificationSchema: Joi.object().keys({
+            title: Joi.string().required(),
+            body: Joi.string().optional().allow(''),
             description: Joi.string().optional().allow(''),
-            pages: Joi.array(),
-            website: Joi.string().optional().allow(''),
-            image: Joi.string().optional().allow('')
+            image_uri: Joi.string().optional().allow(''),
+            link: Joi.string().optional().allow(''),
+            audience: Joi.array().required(),
+            club: Joi.string().required()
         }).unknown(true)
     }
 }

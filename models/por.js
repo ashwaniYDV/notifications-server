@@ -20,6 +20,9 @@ const porSchema = new Schema({
         type: Number,
         required: false,
         default: 0
+    },
+    description: {
+        type: String
     }
 });
 

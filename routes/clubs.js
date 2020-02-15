@@ -15,12 +15,12 @@ router.route('/v2')
 
 router.route('/v2/:clubId')
     .get(passport.authenticate('jwt',{session: false}), ClubsControllers.getAuthenticatedClubsById)
+    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.clubSchema), ClubsControllers.patchClubWithClubId)
 
 //localhost:3000/clubs/:clubId
 router.route('/:clubId')
     .get(ClubsControllers.getClubWithClubId)
     .delete(passport.authenticate('jwt',{session: false}), ClubsControllers.deleteClubWithClubId)
-    .patch(passport.authenticate('jwt',{session: false}), validateBody(schemas.clubSchema), ClubsControllers.patchClubWithClubId)
 
 //localhost:3000/clubs/follow/{clubId}
 router.route('/follow/:clubId')

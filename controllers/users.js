@@ -103,9 +103,14 @@ module.exports={
         const user=req.user;
         const token=signToken(user);
 
+        tempUser = user.toObject();
+        delete tempUser.password;
+        delete tempUser.code;
+        // delete tempUser.pors;
+
         res.status(200).json({
             token: token,
-            user: user
+            user: tempUser
         });
     },
 
@@ -224,16 +229,21 @@ module.exports={
     getUser: async(req,res,next)=>{
         const userId = req.params.userId;
 
-        const user=await User.findOne({_id: userId}).populate('pors');
+        const user=await User.findOne({_id: userId}, 'name instituteId image email phone');
         if(user){
-            res.status(200).json({
-                user: user
-            })
+            res.status(200).send(user);
         } else {
-            res.status(404).json({
-                message: "User not found"   
-            })
+            res.status(404).send("User not found")
         }
+    },
+
+    updateUserDetails: async(req, res, next) => {
+        const currUser = req.user;
+
+        User.findByIdAndUpdate({_id: currUser._id}, req.value.body, {new:true}).then((updatedUser)=>{
+            res.status(200).send("User updated");
+        });
+
     },
 
     //patch particular user api (access: same user && superUser)

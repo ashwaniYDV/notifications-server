@@ -14,14 +14,9 @@ router.route('/signUp')
 router.route('/signIn')
     .post(validateBodySignIn(schemas.authSchemaSignIn), passport.authenticate('local',{session: false}), UsersControllers.signIn)
 
-// //localhost:3000/users/
-// router.route('/')
-//     .get(passport.authenticate('jwt',{session: false}),UsersControllers.getAllUsers)
-
 //localhost:3000/users/:id
 router.route('/:userId')
     .get(passport.authenticate('jwt',{session: false}), UsersControllers.getUser)
-    .patch(passport.authenticate('jwt',{session: false}), validateBodySignUp(schemas.userSchemaPatch), UsersControllers.patchUser)
 
 //localhost:3000/users/activate
 router.route('/activate')
@@ -34,6 +29,9 @@ router.route('/forgotpwd')
 //localhost:3000/users/resetpwd
 router.route('/resetpwd')
     .post(UsersControllers.resetPwd)
+
+router.route('/update')
+    .post(passport.authenticate('jwt',{session: false}), validateBody(schemas.userSchemaPatch), UsersControllers.updateUserDetails)
 
 
 module.exports=router;

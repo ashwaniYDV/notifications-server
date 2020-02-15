@@ -26,14 +26,11 @@ const eventSchema = new Schema({
         type:Number, 
         required: true
     },
-    coordinators : { 
-        type : Array , 
-        "default" : []
-    },
     postLinks : {
         type : Array , 
         "default" : []
-    }
+    },
+    
 });
 
 
