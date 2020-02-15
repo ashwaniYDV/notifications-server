@@ -21,11 +21,6 @@ const userSchema = new Schema({
     type: Boolean,
     dafault: false
   },
-  por: {
-    type: Array,
-    required: true,
-    default: []
-  },
   pors: [{
     type: Schema.Types.ObjectId,
     ref: 'por'
@@ -64,6 +59,10 @@ const userSchema = new Schema({
   active: {
     type: Number,
     default: 0
+  },
+  image: {
+    type: String,
+    default: ""
   }
 });
 

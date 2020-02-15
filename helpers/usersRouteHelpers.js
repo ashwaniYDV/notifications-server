@@ -74,18 +74,9 @@ module.exports={
             active: Joi.number()
         }),
         userSchemaPatch: Joi.object().keys({
-            email: Joi.string().email(),
-            password: Joi.string(),
             name: Joi.string(),
-            isSuperUser: Joi.boolean(),
-            por: Joi.array(),
-            instituteId: Joi.string(),
-            batch: Joi.string(),
-            branch: Joi.string(),
             phone:Joi.string(),
-            rollno: Joi.string(),
-            code: Joi.number(),
-            active: Joi.number()
+            image: Joi.strict()
         }),
     }
 }
