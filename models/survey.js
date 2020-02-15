@@ -90,6 +90,10 @@ const surveySchema = new Schema({
   active:{
     type: Boolean,
     default: true
+  },
+  survey_date:{
+    type: Date,
+    default: Date.now
   }
 });
 

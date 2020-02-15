@@ -22,7 +22,7 @@ module.exports={
             anonymous: Joi.bool(),
             limit_responses: Joi.bool(),
             title: Joi.string().required(),
-            description: Joi.string(),
+            description: Joi.string().optional().allow(''),
         }).unknown(true),
         responseSchema: Joi.object().keys({
             response_details: Joi.array()

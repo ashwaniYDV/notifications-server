@@ -5,9 +5,8 @@ module.exports = {
     getAllSurveys: async (req, res, next) => {
 
         const userId = req.user._id;
-        const surveys = await Survey.find({}).sort({
-            _id: -1
-        });
+        const surveys = await Survey.find({active: true}, 'poster title description accepting_responses anonymous limit_responses')
+            .populate('poster', 'name instituteId image').sort({survey_date: -1});
 
         if (surveys.length > 0) {
             res.status(200);
@@ -65,11 +64,26 @@ module.exports = {
         const surveyId = req.params.surveyId;
         const currUser = req.user;
 
-        const survey = await Survey.findById(surveyId);
+        const survey = await Survey.findById(surveyId, 'poster title description accepting_responses anonymous limit_responses questions');
 
         if (survey) {
             res.status(200);
             res.send(survey);
+        } else {
+            res.status(404);
+            res.send("Survey not found");
+        }
+    },
+
+    getSurveyQuestions: async (req, res, next) => {
+        const surveyId = req.params.surveyId;
+
+        const survey = await Survey.findById(surveyId, 'questions');
+        const questions = survey.questions;
+
+        if (questions) {
+            res.status(200);
+            res.send(questions);
         } else {
             res.status(404);
             res.send("Survey not found");
@@ -85,20 +99,49 @@ module.exports = {
         if (survey) {
 
             if (survey.poster != currUser._id) {
-                res.status(401);
-                res.send("Unauthorised user!");
+                res.status(401).send("Unauthorised user!");
             } else {
 
                 survey.questions.push(req.value.body);
                 await survey.save();
 
-                res.status(200);
-                res.send(survey);
+                res.status(200).send("Question Added");
 
             }
         } else {
             res.status(404);
             res.send("Survey not found");
+        }
+    },
+
+    getSurveyResponses: async (req, res, next) => {
+        const surveyId = req.params.surveyId;
+        const userId = req.user._id;
+
+        const survey = await Survey.findById(surveyId);
+
+        let access = false;
+        if (survey.poster == userId) access = true;
+        if (access === false) {
+            for (const a in survey.responses_access) {
+                if (a.user == userId) {
+                    access = true;
+                    break;
+                }
+            }
+        }
+
+        if (access === true) {
+            const responses = survey.responses;
+            if (responses) {
+                res.status(200).send(responses);
+            } else {
+                res.status(404);
+                res.send("Survey not found");
+            }
+        } else {
+            res.status(401);
+            res.send("Unauthorised User!");
         }
     },
 
