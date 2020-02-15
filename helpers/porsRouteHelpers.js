@@ -21,11 +21,12 @@ module.exports={
     schemas: {
         porSchema: Joi.object().keys({
             position: Joi.string().required(),
-            access: Joi.number()
+            club: Joi.string().required(),
+            description: Joi.string().optional().allow('')
         }).unknown(true),
         approveSchema: Joi.object().keys({
             porId: Joi.string().required(),
             access: Joi.number().required()
-        }).unknown(true)
+        })
     }
 }

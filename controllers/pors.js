@@ -36,7 +36,7 @@ module.exports={
     //get all pors of a user api (access: auth users)
     getUserPors: async(req,res,next)=>{
         const userId = req.params.userId;
-        const pors=await Por.find({user: userId, access:{$gt: 0}}).populate('club', 'name').sort({_id:-1});
+        const pors=await Por.find({user: userId}).populate('club', 'name').sort({_id:-1});
         if(pors){
             res.status(200).json({
                 pors: pors
@@ -50,19 +50,25 @@ module.exports={
 
     //post a por api (access: auth users)
     postPor: async(req,res,next)=>{
-        const club=await Club.findById(req.value.body.club);
-        const user=await User.findById(req.value.body.user);
-        const por=new Por(req.value.body);
-        por.access = 0;
-        await por.save();
-        club.pors.push(por);
-        await club.save();
-        let pors=user.pors;
-        pors.push(por);
-        await User.findByIdAndUpdate({_id: user._id},{pors});
-        res.status(200).json({
-            pors: por
-        })
+        const user = req.user;
+        
+        const club = await Club.findById(req.value.body.club);
+
+        if (club) {
+
+            const por = new Por(req.value.body);
+            por.user = user._id;
+            por.access = 0;
+            await por.save();
+
+            club.pors.push(por);
+            club.save();
+
+            user.pors.push(por);
+            user.save();
+
+            res.status(200).send(por)
+        }
     },
 
     //get event with eventId api (access: auth users)
@@ -78,27 +84,28 @@ module.exports={
                 message: "No por found"
             })
         }
-        
     },
 
     //delete por using porId api (access: superUser)
     deletePorWithPorId: async(req,res,next)=>{
         if(!req.user.isSuperUser) {
-            return res.status(401).json({
-                message: "Unauthorized delete request" 
-            });
+            return res.status(401).send("Unauthorized delete request");
         }
-        const porId=req.params.porId;
-        const por=await Por.findOne({_id: porId})
+
+        const porId = req.params.porId;
+        const por = await Por.findOne({_id: porId})
+
         if(por){
             const club=await Club.findById(por.club);
             club.pors.pull(porId);
             club.save();
+
             const user=await User.findById(por.user);
-            let userPors=user.pors;
-            userPors.pull(porId);
-            await User.findByIdAndUpdate({_id: por.user},{pors: userPors});
+            user.pors.pull(porId);
+            user.save();
+
             await Por.findByIdAndRemove({_id: porId});
+
             res.status(200).json({
                 message: "Por deleted"
             });
@@ -113,9 +120,7 @@ module.exports={
     //update(patch) por with porId api (access: superUser)
     patchPorWithPorId: async(req,res,next)=>{
         if(!req.user.isSuperUser) {
-            return res.status(401).json({
-                message: "Unauthorized update request" 
-            });
+            return res.status(401).json("Unauthorized update request");
         }
         const porId=req.params.porId;
         const por=await Por.findOne({_id: porId})
@@ -135,9 +140,7 @@ module.exports={
     //update(patch) por with porId api (access: superUser)
     approvePor: async(req,res,next)=>{
         if(!req.user.isSuperUser) {
-            return res.status(401).json({
-                message: "Unauthorized approve request" 
-            });
+            return res.status(401).send("Unauthorized approve request");
         }
 
         const porId = req.value.body.porId;
@@ -145,14 +148,10 @@ module.exports={
         const por = await Por.findOne({_id: porId})
         if(por){
             Por.findByIdAndUpdate({_id: porId},{access: req.value.body.access},{new:true}).then((por)=>{
-                res.status(200).json({
-                    pors: por
-                });
+                res.status(200).send(por);
             });
         } else {
-            res.status(404).json({
-                message: "No por found"
-            })
+            res.status(404).send("No por found")
         }
     },
     
