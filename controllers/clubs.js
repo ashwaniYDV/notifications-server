@@ -51,7 +51,7 @@ module.exports={
     //post a club api (access: auth users)
     postClub: async(req,res,next)=>{
 
-        if (req.user._id.isSuperUser === true) {
+        if (req.user.isSuperUser === true) {
             const club=new Club(req.value.body);
             await club.save();
             //response
@@ -59,8 +59,8 @@ module.exports={
                 club: club
             })
         } else {
-            res.status(502).json({
-                message: "Unable to access feature!"
+            res.status(401).json({
+                message: "Unauthorized to use this feature!"
             })
         }
         
