@@ -26,7 +26,8 @@ module.exports={
         }).unknown(true),
         approveSchema: Joi.object().keys({
             porId: Joi.string().required(),
-            access: Joi.number().required()
+            access: Joi.array().required(),
+            code: Joi.number().required()
         })
     }
 }

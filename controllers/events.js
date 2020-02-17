@@ -56,9 +56,9 @@ module.exports={
 
         const currUser = req.user;
         const clubId = req.value.body.relatedClub;
-        const currPor = await Por.findOne({club:clubId, user: currUser._id});
+        const currPor = await Por.findOne({club:clubId, user: currUser._id, code: {$gt:0}, access:{$in: 3}});
 
-        if (currPor && currPor.access > 0) {
+        if (currPor) {
 
             const club=await Club.findById(clubId);
             if (club) {

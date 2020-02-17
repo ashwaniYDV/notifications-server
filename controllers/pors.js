@@ -21,7 +21,7 @@ module.exports={
     //get all pors of a club api (access: auth users)
     getClubPors: async(req,res,next)=>{
         const clubId = req.params.clubId;
-        const pors=await Por.find({club: clubId, access:{$gt: 0}}).populate('user', 'name instituteId image').sort({_id:-1});
+        const pors=await Por.find({club: clubId, code:{$gt: 0}}).populate('user', 'name instituteId image').sort({_id:-1});
         if(pors){
             res.status(200).json({
                 pors: pors
@@ -147,7 +147,7 @@ module.exports={
 
         const por = await Por.findOne({_id: porId})
         if(por){
-            Por.findByIdAndUpdate({_id: porId},{access: req.value.body.access},{new:true}).then((por)=>{
+            Por.findByIdAndUpdate(porId, req.value.body, {new:true}).then((por)=>{
                 res.status(200).send(por);
             });
         } else {

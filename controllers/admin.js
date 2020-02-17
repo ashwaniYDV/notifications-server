@@ -11,9 +11,11 @@ module.exports = {
         const currUser = req.user._id;
         const clubId = req.value.body.club;
 
-        const currPor = await Por.findOne({club: clubId, user: currUser._id});
+        const currPor = await Por.findOne({club: clubId, user: currUser._id, code: {$gt:0}, access:{$in: 2}});
 
-        if (currPor && currPor.access > 0) {
+        console.log(currPor)
+
+        if (currPor) {
 
             const notification = new Notification(req.value.body);
             notification.sender = currUser;
@@ -52,19 +54,13 @@ module.exports = {
                     notification.message_id = JSON.parse(body).message_id;
                     notification.save();
 
-                    res.status(200).send({
-                        message: "Notification sent."
-                    });
+                    res.status(200).send("Notification sent.");
                 } else {
-                    res.status(421).send({
-                        message: "Notification send failed!"
-                    });
+                    res.status(421).send("Notification send failed!");
                 }
             })
         } else {
-            res.status(421).send({
-                message: "Not authorised to send notifications!"
-            });
+            res.status(421).send("Not authorised to send notifications!");
         }
     },
 

@@ -137,9 +137,9 @@ module.exports={
         const clubId = req.params.clubId;
         const currUser = req.user;
 
-        const currPor = await Por.findOne({club:clubId, user: currUser._id});
+        const currPor = await Por.findOne({club:clubId, user: currUser._id, code: {$gt:0}, access:{$in: 1}});
 
-        if ((currPor && currPor.access > 0) || currUser.isSuperUser === true) {
+        if ((currPor) || currUser.isSuperUser === true) {
 
             Club.findByIdAndUpdate({_id: clubId},req.value.body,{new:true}).then((updatedClub)=>{
                 res.status(200).send("Club updated.");
