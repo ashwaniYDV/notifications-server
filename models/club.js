@@ -33,6 +33,10 @@ const clubSchema = new Schema({
     },
     image: {
         type: String
+    }, 
+    active: {
+        type: Boolean,
+        default: false
     }
 });
 

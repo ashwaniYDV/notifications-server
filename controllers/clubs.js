@@ -5,7 +5,7 @@ module.exports={
 
     //get all clubs api (access: auth users)
     getAllClubs: async(req,res,next)=>{
-        const clubs=await Club.find({})
+        const clubs = await Club.find({active: true})
 
         if(clubs){
             res.status(200).json({
@@ -24,6 +24,7 @@ module.exports={
         const userId = req.user._id;
         const clubs = await Club.aggregate(
             [
+                { $match: { active: true } },
                 { "$project": {
                     "name": 1,
                     "bio": 1,
@@ -51,17 +52,15 @@ module.exports={
     //post a club api (access: auth users)
     postClub: async(req,res,next)=>{
 
+        const club = new Club(req.value.body);
+
         if (req.user.isSuperUser === true) {
-            const club=new Club(req.value.body);
+            club.active = true;
             await club.save();
-            //response
-            res.status(200).json({
-                club: club
-            })
+            res.status(200).send(club)
         } else {
-            res.status(401).json({
-                message: "Unauthorized to use this feature!"
-            })
+            await club.save();
+            res.status(200).send("Club added. It Will be reviewed soon...")
         }
         
     },
@@ -88,7 +87,7 @@ module.exports={
         const currUser = req.user;
         const clubId=req.params.clubId;
 
-        const club=await Club.findOne({_id: clubId}, {name:1, bio:1, description:1, image:1, website:1, pages:1, likes:1,});
+        const club=await Club.findOne({_id: clubId, active: true}, {name:1, bio:1, description:1, image:1, website:1, pages:1, likes:1,});
         if(club){
 
             club.set( 'followers',club.likes.length, { strict: false });
@@ -201,6 +200,22 @@ module.exports={
             res.status(404).json({
                 message: 'Club not found!'
             })
+        }
+    },
+
+    approveClub: async(req, res, next) => {
+        if (req.user.isSuperUser === true) {
+            const clubId = req.params.clubId;
+            Club.findByIdAndUpdate(clubId, {active: true}, (err, doc) => {
+                if (err) {
+                    res.status(445).send(err)
+                } else {
+                    res.status(200).send("Club approved")
+                }
+            });
+
+        } else {
+            res.status(401).send("Not authorised!")
         }
     },
     

@@ -27,4 +27,7 @@ router.route('/follow/:clubId')
     .post(passport.authenticate('jwt', {session: false}), ClubsControllers.followClub)
     .get(passport.authenticate('jwt', {session: false}), ClubsControllers.getClubFollowers)
 
+router.route('/approve/:clubId')
+    .post(passport.authenticate('jwt', {session: false}), ClubsControllers.approveClub)
+
 module.exports=router;
