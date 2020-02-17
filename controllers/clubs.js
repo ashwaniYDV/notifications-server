@@ -57,8 +57,9 @@ module.exports={
         if (req.user.isSuperUser === true) {
             club.active = true;
             await club.save();
-            res.status(200).send(club)
+            res.status(200).send("Club added.")
         } else {
+            club.active = true;
             await club.save();
             res.status(200).send("Club added. It Will be reviewed soon...")
         }
