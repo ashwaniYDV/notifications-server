@@ -47,15 +47,15 @@ module.exports = Por;
 /**
  *   POR code guide
  * 
- *  case 1:    //
+ *  case 10:    //
         f = new CoordinatorFragment();
         break;
 
-    case 2:    //
+    case 20:    //
         f = new SubCoordintorFragment();
         break;
 
-    case 3:    //
+    case 30:    //
         f = new SubCoordintorFragment();
         break;
     case 31:    //sub-coordinator
@@ -65,7 +65,7 @@ module.exports = Por;
         f = new SubCoordintorFragment();
         break;
 
-    case 4:    //
+    case 40:    //
         f = new CoordinatorFragment();
         break;
     case 41:    //coordinator
@@ -75,11 +75,11 @@ module.exports = Por;
         f = new CoordinatorFragment();
         break;
 
-    case 5:    //overall-coordinator
+    case 50:    //overall-coordinator
         f = new CoordinatorFragment();
         break;
 
-    case 6:    //
+    case 60:    //
         f = new TechnicalSecretaryFragment();
         break;
     case 61:    //tech
@@ -101,7 +101,7 @@ module.exports = Por;
         f = new MaintenanceSecretaryFragment();
         break;
 
-    case 7:    //
+    case 70:    //
         f = new TechnicalSecretaryFragment();
         break;
     case 71:    //gen-tech
@@ -114,11 +114,11 @@ module.exports = Por;
         f = new TechnicalSecretaryFragment();
         break;
 
-    case 8:    //vp-gymkhana
+    case 80:    //vp-gymkhana
         f = new VPFragment();
         break;
 
-    case 9:    //superuser
+    case 90:    //superuser
         f = new TechnicalSecretaryFragment();
         break;
 * 

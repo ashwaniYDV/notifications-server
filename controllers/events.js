@@ -34,12 +34,11 @@ module.exports={
     },
 
     //get events by date api (access: auth users)
-    getEventsByDate: async(req,res,next)=>{
-        const query=parseInt(req.params.timestamp);
-        const greaterThan = query - 60*24*60*60*1000;
-        const lessThan = query + 60*24*60*60*1000;
+    getEventsByDate: async(req,res,next)=>{        
+        const greaterThan = parseInt(req.params.from);
+        const lessThan = parseInt(req.params.to);
 
-        const events=await Event.find({date: {$gt: greaterThan, $lt: lessThan}}).populate('relatedClub','name bio image').sort({_id:-1});
+        const events=await Event.find({date: {$gte: greaterThan, $lt: lessThan}}).populate('relatedClub','name bio image').sort({_id:-1});
         if(events){
             res.status(200).json({
                 events: events
