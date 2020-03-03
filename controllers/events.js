@@ -39,12 +39,11 @@ module.exports={
         const lessThan = parseInt(req.params.to);
 
         const events=await Event.find({date: {$gte: greaterThan, $lt: lessThan}}).populate('relatedClub','name bio image').sort({_id:-1});
+        // console.log(events)
         if(events){
-            res.status(200).json({
-                events: events
-            })
+            res.status(200).send(events)
         } else {
-            res.status(404).json({
+            res.status(404).send({
                 message: "No events found"
             })
         }
@@ -57,7 +56,7 @@ module.exports={
         const clubId = req.value.body.relatedClub;
         const currPor = await Por.findOne({club:clubId, user: currUser._id, code: {$gt:0}, access:{$in: 3}});
 
-        if (currPor) {
+        if (currPor || currUser.isSuperUser) {
 
             const club=await Club.findById(clubId);
             if (club) {
