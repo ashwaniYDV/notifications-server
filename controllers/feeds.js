@@ -85,23 +85,22 @@ module.exports={
 
     //update(patch) feed with feedId api (access: feedPoster, superUer)
     patchFeedWithFeedId: async(req,res,next)=>{
-        const feedId=req.params.feedId;
-        const userId=req.user.id;
+        const feedId = req.params.feedId;
+        const currUser = req.user;
 
         const feed=await Feed.findOne({_id: feedId})
         if(feed){
-            if(feed.feedPoster==userId || req.user.isSuperUser==true) {
+            if(feed.feedPoster == userId || currUser.isSuperUser==true) {
                 Feed.findByIdAndUpdate({_id: feedId},req.value.body,{new:true}).then((updatedFeed)=>{
-                    res.status(200).json({
-                        updatedFeed: updatedFeed
+                    res.status(200).send({
+                        message: "Feed successfully updated"
                     });
                 });
             } else {
-                res.status(401).json({
+                res.status(401).send({
                     message: "Unauthorized update request" 
                 });
             }
-            
         } else {
             res.status(404).json({
                 message: "No feed found"

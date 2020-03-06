@@ -7,10 +7,6 @@ const feedSchema = new Schema({
         ref: 'user',
         required: true
     },
-    eventVenue: {
-        type: String,
-        required: false
-    },
     eventName: {
         type: String,
         required: true
@@ -22,17 +18,9 @@ const feedSchema = new Schema({
     eventImageUrl: {
         type: String
     },
-    eventDate: {
-        type:Number, 
-        required: false
-    },
     eventId: {
         type:Number,
         default: new Date().getTime()
-    },
-    coordinators : { 
-        type : Array , 
-        "default" : []
     },
     postLinks : {
         type : Array , 
