@@ -23,9 +23,8 @@ module.exports={
             venue: Joi.string(),
             name: Joi.string(),
             description: Joi.string(),
-            eventId: Joi.number(),
-            imageUrl: Joi.string(),
-            coordinators: Joi.array(),
+            relatedClub: Joi.string(),
+            imageUrl: Joi.string().optional().allow(''),
             postLinks: Joi.array(),
             date: Joi.number()
         }).unknown(true)
