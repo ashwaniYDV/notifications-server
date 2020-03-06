@@ -25,6 +25,7 @@ module.exports={
             eventDescription: Joi.string(),
             eventImageUrl: Joi.string().optional().allow(''),
             postLinks: Joi.array(),
+            eventId: Joi.number(),
         }).unknown(false)
     }
 }
