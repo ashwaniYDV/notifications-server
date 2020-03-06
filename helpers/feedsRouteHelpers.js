@@ -21,9 +21,8 @@ module.exports={
     //valiadtion schemas
     schemas: {
         feedSchema: Joi.object().keys({
-            eventName: Joi.string(),
+            eventName: Joi.string().required(),
             eventDescription: Joi.string(),
-            eventId: Joi.number().optional(),
             eventImageUrl: Joi.string().optional().allow(''),
             postLinks: Joi.array(),
         }).unknown(false)

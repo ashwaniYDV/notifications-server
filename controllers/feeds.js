@@ -90,7 +90,10 @@ module.exports={
 
         const feed=await Feed.findOne({_id: feedId})
         if(feed){
-            if(feed.feedPoster == userId || currUser.isSuperUser==true) {
+            if(feed.feedPoster == currUser._id || currUser.isSuperUser == true) {
+
+                req.value.body.eventId = new Date().getTime();
+
                 Feed.findByIdAndUpdate({_id: feedId},req.value.body,{new:true}).then((updatedFeed)=>{
                     res.status(200).send({
                         message: "Feed successfully updated"
