@@ -95,19 +95,13 @@ module.exports={
                 req.value.body.eventId = new Date().getTime();
 
                 Feed.findByIdAndUpdate({_id: feedId},req.value.body,{new:true}).then((updatedFeed)=>{
-                    res.status(200).send({
-                        message: "Feed successfully updated"
-                    });
+                    res.status(200).send("Feed successfully updated");
                 });
             } else {
-                res.status(401).send({
-                    message: "Unauthorized update request" 
-                });
+                res.status(401).send("Unauthorized update request");
             }
         } else {
-            res.status(404).json({
-                message: "No feed found"
-            })
+            res.status(404).send("No feed found")
         }
     },
     
@@ -139,16 +133,12 @@ module.exports={
             if (feed.likes.indexOf(currUser._id) < 0) {
                 feed.likes.push(currUser)
                 await feed.save();
-                res.status(201).json({
-                    message: 'Liked'
-                })
+                res.status(201).send('Liked')
             } else {
                 let i = feed.likes.indexOf(currUser._id);
                 feed.likes.splice(i, 1);
                 await feed.save();
-                res.status(202).json({
-                    message: 'Unliked'
-                })
+                res.status(202).send('Unliked')
             }
         }
     },
@@ -161,18 +151,12 @@ module.exports={
 
         if (feed) {
             if (feed.likes) {
-                res.status(200).json({
-                    likes: feed.likes
-                })
+                res.status(200).send(feed.likes)
             } else {
-                res.status(402).json({
-                    message: 'No likes found!'
-                })
+                res.status(402).send('No likes found!')
             }            
         } else {
-            res.status(404).json({
-                message: 'Feed not found!'
-            })
+            res.status(404).send('Feed not found!')
         }
     },    
 }
