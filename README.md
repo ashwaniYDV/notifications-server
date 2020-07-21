@@ -1,1 +1,1 @@
-# notifications-server
+# IITP-App server
