@@ -4,6 +4,8 @@ const {JWT_SECRET}=require('../configs/config');
 const bcrypt = require("bcryptjs");
 const nodemailer = require('nodemailer');
 
+const { MAIL_ID, MAIL_PASS }=require('../configs/config');
+
 signToken=(user)=>{
     return JWT.sign({
         iss: 'ashwani',
@@ -39,8 +41,8 @@ sendPwdResetMail = async (email, code) => {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'iitpapplication@gmail.com',
-            pass: 'iitpapp@iitp'
+            user: MAIL_ID,
+            pass: MAIL_PASS
         }
     });
     let mailOptions = {
