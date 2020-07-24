@@ -19,8 +19,8 @@ sendMail = async (email, code) => {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'iitpapplication@gmail.com',
-            pass: 'iitpapp@iitp'
+            user: MAIL_ID,
+            pass: MAIL_PASS
         }
     });
     let mailOptions = {
